@@ -10,7 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('simulation', function (Blueprint $table) {
+        Schema::create('simulations', function (Blueprint $table) {
+            $table->id();
             $table->integer('TotalCost');
             $table->integer('currentDay');
         });

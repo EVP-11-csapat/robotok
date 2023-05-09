@@ -13,9 +13,10 @@ return new class extends Migration {
         Schema::create('chargers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('storeID')->references('id')->on('charger_store');
-            $table->foreignId('chargeeID')->nullable()->references('id')->on('robot');
+            $table->foreignId('chargeeID')->nullable()->references('id')->on('robots');
             $table->boolean('active');
             $table->integer('activeHours');
+            $table->foreignId('simulationID')->references('id')->on('simulations');
         });
     }
 

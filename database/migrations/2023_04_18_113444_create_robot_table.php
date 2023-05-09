@@ -10,12 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('robot', function (Blueprint $table) {
+        Schema::create('robots', function (Blueprint $table) {
             $table->id();
             $table->foreignId('storeID')->references('id')->on('robot_store');
             $table->float('charge');
             $table->boolean('active');
             $table->integer('activeHours');
+            $table->foreignId('simulationID')->references('id')->on('simulations');
         });
     }
 

@@ -10,12 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('cargo', function (Blueprint $table) {
+        Schema::create('cargo_templates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->integer('column');
             $table->boolean('perishable');
             $table->integer('arrivalDay');
+            $table->foreignId('simulationID')->references('id')->on('simulations');
         });
     }
 
