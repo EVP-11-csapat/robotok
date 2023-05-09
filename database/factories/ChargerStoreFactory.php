@@ -21,7 +21,7 @@ class ChargerStoreFactory extends Factory
         $cost = pow(2, ($rate)+(random_int(0,10))) + 1000;
 
         return [
-            'rate' => $this->faker->randomFloat(0, 0, 100),
+            'rate' => $rate,
             'model' => $this->faker->lastName,
             'cost' => $cost
         ];
