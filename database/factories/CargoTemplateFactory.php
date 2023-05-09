@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Simulation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,17 @@ class CargoTemplateFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->colorName,
+            'perishable' => $this->faker->boolean,
+            'simulationID' => Simulation::all()->random()->id
+
         ];
+    }
+
+    public function withSimulation($simulationID) : CargoTemplateFactory
+    {
+        return $this->state([
+            'simulationID' => $simulationID
+        ]);
     }
 }

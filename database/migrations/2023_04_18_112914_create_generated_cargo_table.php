@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('generated_cargo', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cargoID')->references('id')->on('cargo_templates');
+            $table->integer('arrivalDay');
             $table->integer('remainingCount');
             $table->foreignId('simulationID')->references('id')->on('simulations');
         });

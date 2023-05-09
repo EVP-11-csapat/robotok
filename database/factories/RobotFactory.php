@@ -20,4 +20,11 @@ class RobotFactory extends Factory
             //
         ];
     }
+
+    public function withSimulation($simulationID) : RobotFactory
+    {
+        return $this->state([
+            'simulationID' => $simulationID
+        ]);
+    }
 }

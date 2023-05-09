@@ -20,4 +20,11 @@ class GeneratedCargoFactory extends Factory
             //
         ];
     }
+
+    public function withSimulation($simulationID) : GeneratedCargoFactory
+    {
+        return $this->state([
+            'simulationID' => $simulationID
+        ]);
+    }
 }
