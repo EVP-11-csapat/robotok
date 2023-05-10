@@ -16,9 +16,9 @@ let robotTemplate = `
         [ACTIVEHOURS]
     </td>
     <td class="px-6 py-4 text-right">
-        <button type="button" id="activate[ID]"
+        <button type="button" id="activateRobot[ID]"
             class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Activate</button>
-        <button type="button" id="deactivate[ID]"
+        <button type="button" id="deactivateRobot[ID]"
             class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Deactivate</button>
     </td>
 </tr>
@@ -42,9 +42,9 @@ let chargerTemplate = `
         [ACTIVEHOURS]
     </td>
     <td class="px-6 py-4 text-right">
-        <button type="button" id="activate[ID]"
+        <button type="button" id="activateCharger[ID]"
             class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Activate</button>
-        <button type="button" id="deactivate[ID]"
+        <button type="button" id="deactivateCharger[ID]"
             class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Deactivate</button>
     </td>
 </tr>
@@ -85,6 +85,7 @@ $(document).ready(() => {
             },
             success: (resp) => {
                 console.log(resp);
+                updateChargers();
             },
             error: (err) => {
                 console.log(err);
@@ -107,11 +108,11 @@ const updateRobots = () => {
                     .replace('[ID]', robot.id)
                     .replace('[ID]', robot.id)
                     .replace('[MODEL]', robot.model)
-                    .replace('[ACTIVE]', robot.active ? 'Yes' : 'No')
+                    .replace('[ACTIVE]', robot.active ? 'Active' : 'Inactive')
                     .replace('[CHARGE]', robot.charge)
                     .replace('[ACTIVEHOURS]', robot.active_hours);
                 robotTableBody.append(row);
-                $(`#activate${robot.id}`).on('click', (e) => {
+                $(`#activateRobot${robot.id}`).on('click', (e) => {
                     console.log(`Activate ${robot.id}`);
                     $.ajax({
                         url: '/api/activaterobot',
@@ -129,7 +130,7 @@ const updateRobots = () => {
                         }
                     });
                 });
-                $(`#deactivate${robot.id}`).on('click', (e) => {
+                $(`#deactivateRobot${robot.id}`).on('click', (e) => {
                     console.log(`Deactivate ${robot.id}`);
                     $.ajax({
                         url: '/api/activaterobot',
@@ -164,13 +165,51 @@ const updateChargers = () => {
         type: 'GET',
         success: (resp) => {
             console.log(resp);
-            resp.forEach(robot => {
-                let row = chargerTemplate.replace('[ID]', robot.id)
-                    .replace('[MODEL]', robot.model)
-                    .replace('[ACTIVE]', robot.active ? 'Yes' : 'No')
-                    .replace('[CHARGING]', robot.chargee)
-                    .replace('[ACTIVEHOURS]', robot.active_hours);
-                chargerTable.append(row);
+            resp.forEach(charger => {
+                let row = chargerTemplate.replace('[ID]', charger.id)
+                    .replace('[ID]', charger.id)
+                    .replace('[ID]', charger.id)
+                    .replace('[MODEL]', charger.model)
+                    .replace('[ACTIVE]', charger.active ? 'Active' : 'Inactive')
+                    .replace('[CHARGING]', charger.chargee)
+                    .replace('[ACTIVEHOURS]', charger.active_hours);
+                chargerTableBody.append(row);
+                $(`#activateCharger${charger.id}`).on('click', (e) => {
+                    console.log(`Activate ${charger.id}`);
+                    $.ajax({
+                        url: '/api/activatecharger',
+                        type: 'POST',
+                        data: {
+                            id: charger.id,
+                            active: true
+                        },
+                        success: (resp) => {
+                            console.log(resp);
+                            updateChargers();
+                        },
+                        error: (err) => {
+                            console.log(err);
+                        }
+                    });
+                });
+                $(`#deactivateCharger${charger.id}`).on('click', (e) => {
+                    console.log(`Deactivate ${charger.id}`);
+                    $.ajax({
+                        url: '/api/activatecharger',
+                        type: 'POST',
+                        data: {
+                            id: charger.id,
+                            active: false
+                        },
+                        success: (resp) => {
+                            console.log(resp);
+                            updateChargers();
+                        },
+                        error: (err) => {
+                            console.log(err);
+                        }
+                    });
+                });
             });
         },
         error: (err) => {

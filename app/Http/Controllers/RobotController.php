@@ -42,9 +42,9 @@ class RobotController extends Controller
     public function activateRobot(Request $request): JsonResponse
     {
         $robot = Robot::index($request->all()['id']);
-        $robot->active = $request->all()['active'];
+        $robot->active = ($request->all()['active'] == 'true');
         $robot->save();
-        return response()->json(['success' => $request->all()['id']]);
+        return response()->json(['success' => $request->all()['active']]);
     }
 
 }

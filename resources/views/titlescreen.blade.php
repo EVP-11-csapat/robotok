@@ -59,7 +59,7 @@
                         Model
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Active
+                        Status
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Charge
@@ -92,7 +92,7 @@
                         Model
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Active
+                        Status
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Charging

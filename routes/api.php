@@ -24,7 +24,7 @@ Route::post("/addrobot", [RobotController::class, 'addRobot']);
 Route::post("/addcharger", [ChargerController::class, 'addCharger']);
 
 Route::post("/activaterobot", [RobotController::class, 'activateRobot']);
-Route::post("/activatecharger", [RobotController::class, 'activateCharger']);
+Route::post("/activatecharger", [ChargerController::class, 'activateCharger']);
 
 Route::get("/getrobots", [RobotController::class, 'getRobots']);
 Route::get("/getchargers", [ChargerController::class, 'getChargers']);

@@ -43,8 +43,9 @@ class ChargerController extends Controller
     public function activateCharger(Request $request): JsonResponse
     {
         $charger = Charger::index($request->all()['id']);
-        $charger->active = $request->all()['active'];
+        $charger->active = ($request->all()['active'] == 'true');
         $charger->save();
-        return response()->json(['success' => $request->all()['id']]);
+        return response()->json(['success' => $request->all()['active']]);
     }
+
 }

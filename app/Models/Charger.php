@@ -35,10 +35,5 @@ class Charger extends Model
     {
         return Charger::all()->where('id', $id)->first();
     }
-    public function setActive($active): void
-    {
-        $this->fillable['active'] = $active;
-        $this->save();
-    }
 
 }
