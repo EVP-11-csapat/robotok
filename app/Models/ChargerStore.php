@@ -13,7 +13,13 @@ class ChargerStore extends Model
 
     public $timestamps = false;
 
-    public function chargers(){
+    public static function index(mixed $storeID)
+    {
+        return ChargerStore::all()->where('id', $storeID)->first();
+    }
+
+    public function chargers()
+    {
         return $this->hasMany(Charger::class);
     }
 }

@@ -5,9 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @method static where(string $string, mixed $storeID)
- */
 class RobotStore extends Model
 {
     protected $table = 'robot_store';

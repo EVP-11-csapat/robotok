@@ -26,7 +26,7 @@ class Charger extends Model
         return $this->belongsTo(ChargerStore::class);
     }
 
-    public function charger(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function robot(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Robot::class);
     }
