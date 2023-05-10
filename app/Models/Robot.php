@@ -31,9 +31,4 @@ class Robot extends Model
     {
         return $this->belongsTo(Charger::class);
     }
-
-    public static function index(mixed $id)
-    {
-        return Robot::all()->where('id', $id)->first();
-    }
 }

@@ -18,7 +18,9 @@ class RobotStore extends Model
         return RobotStore::all()->where('id', $storeID)->first();
     }
 
-    public function robots(){
+
+    public function robots(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
         return $this->hasMany(Robot::class);
     }
 }

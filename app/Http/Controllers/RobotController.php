@@ -4,22 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Robot;
 use App\Models\RobotStore;
+use App\Models\Simulation;
 use Illuminate\Http\Request;
-use PhpParser\Node\Expr\Cast\Object_;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use function Sodium\add;
 
 class RobotController extends Controller
 {
     public function addRobot(Request $request): JsonResponse
     {
-        $storeID = $request->all()['id'];
-        $storeRobot = RobotStore::index($storeID);
+        $storeRobot = RobotStore::find(request('id'));
         $robot = new Robot(['charge' => $storeRobot->capacity, 'active' => false, 'active_hours' => 0]);
-        $robot->simulation()->associate(1);
-        $robot->store()->associate($storeID);
+        $robot->simulation()->associate(Simulation::find(1));
+        $robot->store()->associate($storeRobot);
         $robot->save();
-        return response()->json(['success' => $request->all()['id']]);
+        return response()->json(['success' => request('id')]);
     }
 
     public function getRobots(Request $request): JsonResponse
@@ -32,7 +30,7 @@ class RobotController extends Controller
                 'charge' => $robot->charge,
                 'active' => $robot->active,
                 'active_hours' => $robot->active_hours,
-                'model' => $robot->store()->first()->model
+                'model' => $robot->store->model
             ];
         }
 
@@ -41,10 +39,10 @@ class RobotController extends Controller
 
     public function activateRobot(Request $request): JsonResponse
     {
-        $robot = Robot::index($request->all()['id']);
-        $robot->active = ($request->all()['active'] == 'true');
+        $robot = Robot::find(request('id'));
+        $robot->active = (request('active') == 'true');
         $robot->save();
-        return response()->json(['success' => $request->all()['active']]);
+        return response()->json(['success' => request('active')]);
     }
 
 }

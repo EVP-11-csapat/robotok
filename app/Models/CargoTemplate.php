@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CargoTemplate extends Model
 {
     use HasFactory;
-    
+
     public $timestamps = false;
 
     public function simulations(){
