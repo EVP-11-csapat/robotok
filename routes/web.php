@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $storeRobots = RobotStore::all()->sortBy('cost');
-    return view('titlescreen')->with('storerobots', $storeRobots);
+    $storeChargers = ChargerStore::all()->sortBy('cost');
+    return view('titlescreen')->with('storerobots', $storeRobots)->with('storechargers', $storeChargers);
 });
 
 Route::get('/contact', function () {

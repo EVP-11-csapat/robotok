@@ -17,4 +17,23 @@ $(document).ready(() => {
             }
         });
     });
+
+    $('#buyCharger').on('click', (e) => {
+        e.preventDefault();
+        let chargerId = $('#chargers').val();
+        console.log(chargerId);
+        $.ajax({
+            url: '/api/addcharger',
+            type: 'POST',
+            data: {
+                id: chargerId
+            },
+            success: (resp) => {
+                console.log(resp);
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        });
+    });
 });
