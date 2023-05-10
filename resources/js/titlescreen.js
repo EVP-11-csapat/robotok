@@ -51,8 +51,8 @@ let chargerTemplate = `
 `;
 
 $(document).ready(() => {
-    updateRobots();
-    updateChargers();
+    // updateRobots();
+    // updateChargers();
     $('#buyRobot').on('click', (e) => {
         e.preventDefault();
         let robotId = $('#robots').val();
@@ -94,126 +94,126 @@ $(document).ready(() => {
     });
 });
 
-const updateRobots = () => {
-    let robotTable = $('#robotTable')
-    let robotTableBody = $('#robotTable > tbody');
-    robotTableBody.empty();
-    $.ajax({
-        url: '/api/getrobots',
-        type: 'GET',
-        success: (resp) => {
-            console.log(resp);
-            resp.forEach(robot => {
-                let row = robotTemplate.replace('[ID]', robot.id)
-                    .replace('[ID]', robot.id)
-                    .replace('[ID]', robot.id)
-                    .replace('[MODEL]', robot.model)
-                    .replace('[ACTIVE]', robot.active ? 'Active' : 'Inactive')
-                    .replace('[CHARGE]', robot.charge)
-                    .replace('[ACTIVEHOURS]', robot.active_hours);
-                robotTableBody.append(row);
-                $(`#activateRobot${robot.id}`).on('click', (e) => {
-                    console.log(`Activate ${robot.id}`);
-                    $.ajax({
-                        url: '/api/activaterobot',
-                        type: 'POST',
-                        data: {
-                            id: robot.id,
-                            active: true
-                        },
-                        success: (resp) => {
-                            console.log(resp);
-                            updateRobots();
-                        },
-                        error: (err) => {
-                            console.log(err);
-                        }
-                    });
-                });
-                $(`#deactivateRobot${robot.id}`).on('click', (e) => {
-                    console.log(`Deactivate ${robot.id}`);
-                    $.ajax({
-                        url: '/api/activaterobot',
-                        type: 'POST',
-                        data: {
-                            id: robot.id,
-                            active: false
-                        },
-                        success: (resp) => {
-                            console.log(resp);
-                            updateRobots();
-                        },
-                        error: (err) => {
-                            console.log(err);
-                        }
-                    });
-                });
-            });
-        },
-        error: (err) => {
-            console.log(err);
-        }
-    });
-};
+// const updateRobots = () => {
+//     let robotTable = $('#robotTable')
+//     let robotTableBody = $('#robotTable > tbody');
+//     robotTableBody.empty();
+//     $.ajax({
+//         url: '/api/getrobots',
+//         type: 'GET',
+//         success: (resp) => {
+//             console.log(resp);
+//             resp.forEach(robot => {
+//                 let row = robotTemplate.replace('[ID]', robot.id)
+//                     .replace('[ID]', robot.id)
+//                     .replace('[ID]', robot.id)
+//                     .replace('[MODEL]', robot.model)
+//                     .replace('[ACTIVE]', robot.active ? 'Active' : 'Inactive')
+//                     .replace('[CHARGE]', robot.charge)
+//                     .replace('[ACTIVEHOURS]', robot.active_hours);
+//                 robotTableBody.append(row);
+//                 $(`#activateRobot${robot.id}`).on('click', (e) => {
+//                     console.log(`Activate ${robot.id}`);
+//                     $.ajax({
+//                         url: '/api/activaterobot',
+//                         type: 'POST',
+//                         data: {
+//                             id: robot.id,
+//                             active: true
+//                         },
+//                         success: (resp) => {
+//                             console.log(resp);
+//                             updateRobots();
+//                         },
+//                         error: (err) => {
+//                             console.log(err);
+//                         }
+//                     });
+//                 });
+//                 $(`#deactivateRobot${robot.id}`).on('click', (e) => {
+//                     console.log(`Deactivate ${robot.id}`);
+//                     $.ajax({
+//                         url: '/api/activaterobot',
+//                         type: 'POST',
+//                         data: {
+//                             id: robot.id,
+//                             active: false
+//                         },
+//                         success: (resp) => {
+//                             console.log(resp);
+//                             updateRobots();
+//                         },
+//                         error: (err) => {
+//                             console.log(err);
+//                         }
+//                     });
+//                 });
+//             });
+//         },
+//         error: (err) => {
+//             console.log(err);
+//         }
+//     });
+// };
 
-const updateChargers = () => {
-    let chargerTable = $('#chargerTable')
-    let chargerTableBody = $('#chargerTable > tbody');
-    chargerTableBody.empty();
-    $.ajax({
-        url: '/api/getchargers',
-        type: 'GET',
-        success: (resp) => {
-            console.log(resp);
-            resp.forEach(charger => {
-                let row = chargerTemplate.replace('[ID]', charger.id)
-                    .replace('[ID]', charger.id)
-                    .replace('[ID]', charger.id)
-                    .replace('[MODEL]', charger.model)
-                    .replace('[ACTIVE]', charger.active ? 'Active' : 'Inactive')
-                    .replace('[CHARGING]', charger.chargee)
-                    .replace('[ACTIVEHOURS]', charger.active_hours);
-                chargerTableBody.append(row);
-                $(`#activateCharger${charger.id}`).on('click', (e) => {
-                    console.log(`Activate ${charger.id}`);
-                    $.ajax({
-                        url: '/api/activatecharger',
-                        type: 'POST',
-                        data: {
-                            id: charger.id,
-                            active: true
-                        },
-                        success: (resp) => {
-                            console.log(resp);
-                            updateChargers();
-                        },
-                        error: (err) => {
-                            console.log(err);
-                        }
-                    });
-                });
-                $(`#deactivateCharger${charger.id}`).on('click', (e) => {
-                    console.log(`Deactivate ${charger.id}`);
-                    $.ajax({
-                        url: '/api/activatecharger',
-                        type: 'POST',
-                        data: {
-                            id: charger.id,
-                            active: false
-                        },
-                        success: (resp) => {
-                            console.log(resp);
-                            updateChargers();
-                        },
-                        error: (err) => {
-                            console.log(err);
-                        }
-                    });
-                });
-            });
-        },
-        error: (err) => {
-            console.log(err);
-        }
-    });
-};
+// const updateChargers = () => {
+//     let chargerTable = $('#chargerTable')
+//     let chargerTableBody = $('#chargerTable > tbody');
+//     chargerTableBody.empty();
+//     $.ajax({
+//         url: '/api/getchargers',
+//         type: 'GET',
+//         success: (resp) => {
+//             console.log(resp);
+//             resp.forEach(charger => {
+//                 let row = chargerTemplate.replace('[ID]', charger.id)
+//                     .replace('[ID]', charger.id)
+//                     .replace('[ID]', charger.id)
+//                     .replace('[MODEL]', charger.model)
+//                     .replace('[ACTIVE]', charger.active ? 'Active' : 'Inactive')
+//                     .replace('[CHARGING]', charger.chargee)
+//                     .replace('[ACTIVEHOURS]', charger.active_hours);
+//                 chargerTableBody.append(row);
+//                 $(`#activateCharger${charger.id}`).on('click', (e) => {
+//                     console.log(`Activate ${charger.id}`);
+//                     $.ajax({
+//                         url: '/api/activatecharger',
+//                         type: 'POST',
+//                         data: {
+//                             id: charger.id,
+//                             active: true
+//                         },
+//                         success: (resp) => {
+//                             console.log(resp);
+//                             updateChargers();
+//                         },
+//                         error: (err) => {
+//                             console.log(err);
+//                         }
+//                     });
+//                 });
+//                 $(`#deactivateCharger${charger.id}`).on('click', (e) => {
+//                     console.log(`Deactivate ${charger.id}`);
+//                     $.ajax({
+//                         url: '/api/activatecharger',
+//                         type: 'POST',
+//                         data: {
+//                             id: charger.id,
+//                             active: false
+//                         },
+//                         success: (resp) => {
+//                             console.log(resp);
+//                             updateChargers();
+//                         },
+//                         error: (err) => {
+//                             console.log(err);
+//                         }
+//                     });
+//                 });
+//             });
+//         },
+//         error: (err) => {
+//             console.log(err);
+//         }
+//     });
+// };
