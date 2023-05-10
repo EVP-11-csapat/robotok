@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RobotStoreController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('titlescreen');
+    return view('titlescreen').with('storerobots', [RobotStoreController::class, 'getstorerobots']);
 });
 
 Route::get('/contact', function () {

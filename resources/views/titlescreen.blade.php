@@ -43,5 +43,13 @@
             <div class="h-2.5 bg-gray-300 rounded-full w-12"></div>
         </div>
         <span class="sr-only">Loading...</span>
+
+        <table>
+            <tr>
+                <th>
+
+                </th>
+            </tr>
+        </table>
     </div>
 @endsection
