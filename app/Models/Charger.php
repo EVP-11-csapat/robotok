@@ -31,4 +31,14 @@ class Charger extends Model
         return $this->hasOne(Robot::class);
     }
 
+    public static function index(mixed $id)
+    {
+        return Charger::all()->where('id', $id)->first();
+    }
+    public function setActive($active): void
+    {
+        $this->fillable['active'] = $active;
+        $this->save();
+    }
+
 }

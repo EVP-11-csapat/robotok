@@ -18,8 +18,27 @@ class ChargerController extends Controller
         return response()->json(['success' => $request->all()['id']]);
     }
 
-    public function getChargers(Request $request): JsonResponse{
-        $robots = Charger::all()->sortBy('id');
-        return response()->json($robots);
+    public function getChargers(Request $request): JsonResponse
+    {
+        $chargers = Charger::all()->sortBy('id');
+        $chargerentries = array();
+        foreach ($chargers as $charger) {
+
+            $chargerentries[] = (object)[
+                'id' => $charger->id,
+                'active' => $charger->active,
+                'active_hours' => $charger->active_hours,
+                'model' => $charger->store()->first()->model
+            ];
+        }
+        return response()->json($chargerentries);
+    }
+
+    public function activateCharger(Request $request): JsonResponse
+    {
+        $charger = Charger::index($request->all()['id']);
+        $charger->active = $request->all()['active'];
+        $charger->save();
+        return response()->json(['success' => $request->all()['id']]);
     }
 }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Robot;
 use App\Models\RobotStore;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\Cast\Object_;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use function Sodium\add;
 
 class RobotController extends Controller
 {
@@ -20,9 +22,29 @@ class RobotController extends Controller
         return response()->json(['success' => $request->all()['id']]);
     }
 
-    public function getRobots(Request $request): JsonResponse{
+    public function getRobots(Request $request): JsonResponse
+    {
         $robots = Robot::all()->sortBy('id');
-        return response()->json($robots);
+        $robotentries = array();
+        foreach ($robots as $robot) {
+            $robotentries[] = (object)[
+                'id' => $robot->id,
+                'charge' => $robot->charge,
+                'active' => $robot->active,
+                'active_hours' => $robot->active_hours,
+                'model' => $robot->store()->first()->model
+            ];
+        }
+
+        return response()->json($robotentries);
+    }
+
+    public function activateRobot(Request $request): JsonResponse
+    {
+        $robot = Robot::index($request->all()['id']);
+        $robot->active = $request->all()['active'];
+        $robot->save();
+        return response()->json(['success' => $request->all()['id']]);
     }
 
 }

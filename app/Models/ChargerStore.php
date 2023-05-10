@@ -18,7 +18,7 @@ class ChargerStore extends Model
         return ChargerStore::all()->where('id', $storeID)->first();
     }
 
-    public function chargers()
+    public function charger()
     {
         return $this->hasMany(Charger::class);
     }
