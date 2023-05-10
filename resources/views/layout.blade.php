@@ -45,7 +45,7 @@
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 min-h-screen">
+    <div class="container mx-auto px-4 min-h-screen mt-4">
         @yield('content')
     </div>
 
@@ -65,7 +65,7 @@
             </ul>
         </div>
     </footer>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
 </html>

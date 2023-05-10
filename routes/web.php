@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\RobotStoreController;
 use App\Models\ChargerStore;
+use App\Models\RobotStore;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $storeRobots = ChargerStore::all();
+    $storeRobots = RobotStore::all()->sortBy('cost');
     return view('titlescreen')->with('storerobots', $storeRobots);
 });
 
