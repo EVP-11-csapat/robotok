@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 class RobotController extends Controller
 {
     public function addRobot(Request $request){
-        $storeID = $request->input('ID');
-        $capacity = $request->input('capacity');
-        $robot = new \App\Models\Robot(['charge' => $capacity, 'active' => false, 'active_hours' => 0]);
+        $storeID = $request->input('id');
+        $storeRobot = \App\Models\RobotStore::index($storeID);
+        $robot = new \App\Models\Robot(['charge' => $storeRobot->capacity, 'active' => false, 'active_hours' => 0]);
         $robot->simulation()->associate(1);
         $robot->store()->associate($storeID);
         $robot->save();
