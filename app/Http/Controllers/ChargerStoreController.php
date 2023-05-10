@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 class ChargerStoreController extends Controller
 {
-    public function getStoreChargers() : JsonResponse {
+    public function getStoreChargers(): JsonResponse
+    {
         $data = ChargerStore::all();
         return response()->json($data);
     }

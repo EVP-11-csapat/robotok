@@ -45,11 +45,17 @@
         <span class="sr-only">Loading...</span>
 
         <table>
-            <tr>
-                <th>
-
-                </th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($storerobots as $robot)
+                    <tr>
+                        <td>{{ $robot }}</td>
+                    </tr>
+                @endforeach
         </table>
     </div>
 @endsection

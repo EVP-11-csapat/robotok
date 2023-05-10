@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RobotStoreController;
+use App\Models\ChargerStore;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('titlescreen').with('storerobots', [RobotStoreController::class, 'getstorerobots']);
+    $storeRobots = ChargerStore::all();
+    return view('titlescreen')->with('storerobots', $storeRobots);
 });
 
 Route::get('/contact', function () {
