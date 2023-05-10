@@ -1,6 +1,6 @@
 @extends('layout')
 
-@vite('resources/js/titlescreen.js')
+{{-- @vite('resources/js/titlescreen.js') --}}
 
 @section('title')
     Title screen
