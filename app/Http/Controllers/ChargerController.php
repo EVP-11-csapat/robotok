@@ -24,10 +24,16 @@ class ChargerController extends Controller
         $chargerentries = array();
         foreach ($chargers as $charger) {
 
+            $chargee = $charger->robot()->first();
+
+            if ($chargee == null) $chargee = 'None';
+            else $chargee = $chargee->id;
+
             $chargerentries[] = (object)[
                 'id' => $charger->id,
                 'active' => $charger->active,
                 'active_hours' => $charger->active_hours,
+                'chargee' => $chargee,
                 'model' => $charger->store()->first()->model
             ];
         }

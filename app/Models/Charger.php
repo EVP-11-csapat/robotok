@@ -26,9 +26,9 @@ class Charger extends Model
         return $this->belongsTo(ChargerStore::class);
     }
 
-    public function robot(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function robot(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->hasOne(Robot::class);
+        return $this->belongsTo(Robot::class, 'chargee_id');
     }
 
     public static function index(mixed $id)
