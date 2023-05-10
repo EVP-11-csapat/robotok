@@ -20,4 +20,9 @@ class RobotController extends Controller
         return response()->json(['success' => $request->all()['id']]);
     }
 
+    public function getRobots(Request $request): JsonResponse{
+        $robots = Robot::all()->sortBy('id');
+        return response()->json($robots);
+    }
+
 }

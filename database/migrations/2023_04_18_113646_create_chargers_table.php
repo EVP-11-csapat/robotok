@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('store_id')->references('id')->on('charger_store');
             $table->foreignId('chargee_id')->nullable()->references('id')->on('robots');
             $table->boolean('active');
-            $table->integer('activeHours');
+            $table->integer('active_hours');
             $table->foreignId('simulation_id')->references('id')->on('simulations');
         });
     }

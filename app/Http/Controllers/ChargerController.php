@@ -17,4 +17,9 @@ class ChargerController extends Controller
         $charger->save();
         return response()->json(['success' => $request->all()['id']]);
     }
+
+    public function getChargers(Request $request): JsonResponse{
+        $robots = Charger::all()->sortBy('id');
+        return response()->json($robots);
+    }
 }
