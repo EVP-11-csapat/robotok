@@ -24,7 +24,7 @@ class ChargerFactory extends Factory
     public function withSimulation($simulationID) : ChargerFactory
     {
         return $this->state([
-            'simulationID' => $simulationID
+            'simulation_id' => $simulationID
         ]);
     }
 }

@@ -20,7 +20,7 @@ class CargoTemplateFactory extends Factory
         return [
             'name' => $this->faker->colorName,
             'perishable' => $this->faker->boolean,
-            'simulationID' => Simulation::all()->random()->id
+            'simulation_id' => Simulation::all()->random()->id
 
         ];
     }
@@ -28,7 +28,7 @@ class CargoTemplateFactory extends Factory
     public function withSimulation($simulationID) : CargoTemplateFactory
     {
         return $this->state([
-            'simulationID' => $simulationID
+            'simulation_id' => $simulationID
         ]);
     }
 }

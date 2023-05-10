@@ -8,18 +8,27 @@ use Illuminate\Database\Eloquent\Model;
 class Robot extends Model
 {
     use HasFactory;
-    
+
     public $timestamps = false;
-    
-    public function simulations(){
+
+    protected $fillable = [
+        'charge',
+        'active',
+        'active_hours',
+    ];
+
+    public function simulation(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
         return $this->belongsTo(Simulation::class);
     }
-    
-    public function robot_store(){
+
+    public function store(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
         return $this->belongsTo(RobotStore::class);
     }
-    
-    public function chargers(){
+
+    public function robot(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
         return $this->belongsTo(Charger::class);
     }
 }

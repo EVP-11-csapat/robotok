@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->boolean('perishable');
-            $table->foreignId('simulationID')->references('id')->on('simulations');
+            $table->foreignId('simulation_id')->references('id')->on('simulations');
         });
     }
 

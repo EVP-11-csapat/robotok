@@ -12,11 +12,11 @@ return new class extends Migration {
     {
         Schema::create('chargers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('storeID')->references('id')->on('charger_store');
-            $table->foreignId('chargeeID')->nullable()->references('id')->on('robots');
+            $table->foreignId('store_id')->references('id')->on('charger_store');
+            $table->foreignId('chargee_id')->nullable()->references('id')->on('robots');
             $table->boolean('active');
             $table->integer('activeHours');
-            $table->foreignId('simulationID')->references('id')->on('simulations');
+            $table->foreignId('simulation_id')->references('id')->on('simulations');
         });
     }
 
