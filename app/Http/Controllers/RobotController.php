@@ -11,7 +11,7 @@ class RobotController extends Controller
     public function addRobot(Request $request): JsonResponse
     {
         $storeID = $request->all()['id'];
-        $storeRobot = RobotStore::all()->where('id', $storeID)->first();
+        $storeRobot = RobotStore::index($storeID);
         $robot = new \App\Models\Robot(['charge' => $storeRobot->capacity, 'active' => false, 'active_hours' => 0]);
         $robot->simulation()->associate(1);
         $robot->store()->associate($storeID);

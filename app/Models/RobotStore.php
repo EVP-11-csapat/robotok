@@ -18,7 +18,7 @@ class RobotStore extends Model
 
     public static function index(mixed $storeID)
     {
-        return self::where('store_id', $storeID)->get();
+        return RobotStore::all()->where('id', $storeID)->first();
     }
 
     public function robots(){
