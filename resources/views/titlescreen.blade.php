@@ -44,4 +44,70 @@
             </div>
         </div>
     </form>
+
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="flex justify-center my-auto mx-auto">
+            <h1 class="text-lg text-gray-800 font-bold">Robot Status Table</h1>
+        </div>
+        <table class="w-full text-sm text-left text-gray-500" id="robotTable">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        ID
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Model
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Active
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Charge
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Active for hours
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Edit</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+        <div class="flex justify-center my-auto mx-auto">
+            <h1 class="text-lg text-gray-800 font-bold">Charger Status Table</h1>
+        </div>
+        <table class="w-full text-sm text-left text-gray-500" id="chargerTable">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        ID
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Model
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Active
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Charging
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Active for hours
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        <span class="sr-only">Edit</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
 @endsection
