@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChargerController;
+use App\Http\Controllers\GeneratedCargoController;
 use App\Http\Controllers\RobotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,3 +29,5 @@ Route::post("/activatecharger", [ChargerController::class, 'activateCharger']);
 
 Route::get("/getrobots", [RobotController::class, 'getRobots']);
 Route::get("/getchargers", [ChargerController::class, 'getChargers']);
+
+Route::post("/importcargo", [GeneratedCargoController::class, 'importCargo']);

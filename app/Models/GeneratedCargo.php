@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GeneratedCargo extends Model
 {
@@ -13,11 +14,20 @@ class GeneratedCargo extends Model
 
     public $timestamps = false;
 
-    public function simulations(){
+    protected $fillable = [
+        'simulation_id',
+        'cargo_id',
+        'remaining_count',
+        'arrival_day'
+    ];
+
+    public function simulation(): BelongsTo
+    {
         return $this->belongsTo(Simulation::class);
     }
 
-    public function cargo_templates(){
+    public function template(): BelongsTo
+    {
         return $this->belongsTo(CargoTemplate::class);
     }
 }
