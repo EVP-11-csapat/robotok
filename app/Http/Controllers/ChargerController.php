@@ -12,9 +12,11 @@ class ChargerController extends Controller
 {
     public function addCharger(Request $request): JsonResponse
     {
+        $storeCharger = ChargerStore::find(request('id'));
+        SimulationController::incrementTotalCost($storeCharger->cost);
         $charger = new Charger(['active' => false, 'active_hours' => 0]);
         $charger->simulation()->associate(Simulation::find(1));
-        $charger->store()->associate(ChargerStore::find(request('id')));
+        $charger->store()->associate($storeCharger);
         $charger->save();
         return response()->json(['success' => request('id')]);
     }

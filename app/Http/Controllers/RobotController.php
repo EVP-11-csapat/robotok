@@ -13,6 +13,7 @@ class RobotController extends Controller
     public function addRobot(Request $request): JsonResponse
     {
         $storeRobot = RobotStore::find(request('id'));
+        SimulationController::incrementTotalCost($storeRobot->cost);
         $robot = new Robot(['charge' => $storeRobot->capacity, 'active' => false, 'active_hours' => 0]);
         $robot->simulation()->associate(Simulation::find(1));
         $robot->store()->associate($storeRobot);

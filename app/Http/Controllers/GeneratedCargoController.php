@@ -18,9 +18,13 @@ class GeneratedCargoController extends Controller
             $template = CargoTemplate::whereSimulationId(1)->inRandomOrder()->first();
 
             $cargo = GeneratedCargo::firstOrCreate(
-                ['cargo_id' => $template->id, 'arrival_day' => request('day', 0)],
+                ['template_id' => $template->id, 'arrival_day' => request('day', 0)],
                 ['simulation_id' => 1, 'remaining_count' => 0]
             );
+            if ($cargo->template === null) {
+                $cargo->template()->associate($template);
+            }
+
 
             $cargo->remaining_count++;
             $cargo->save();

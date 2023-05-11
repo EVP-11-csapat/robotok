@@ -16,7 +16,7 @@ class GeneratedCargo extends Model
 
     protected $fillable = [
         'simulation_id',
-        'cargo_id',
+        'template_id',
         'remaining_count',
         'arrival_day'
     ];
