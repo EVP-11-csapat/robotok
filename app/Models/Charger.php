@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Charger extends Model
 {
@@ -16,17 +17,17 @@ class Charger extends Model
         'active_hours',
     ];
 
-    public function simulation(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function simulation(): BelongsTo
     {
         return $this->belongsTo(Simulation::class);
     }
 
-    public function store(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function store(): BelongsTo
     {
         return $this->belongsTo(ChargerStore::class);
     }
 
-    public function robot(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function robot(): BelongsTo
     {
         return $this->belongsTo(Robot::class, 'chargee_id');
     }
