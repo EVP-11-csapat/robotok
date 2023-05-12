@@ -15,7 +15,7 @@ let robotTemplate = `
     <td class="px-6 py-4">
         [ACTIVEHOURS]
     </td>
-    <td class="px-6 py-4 text-right">
+    <td class="px-6 py-4 text-center">
         <button type="button" id="activateRobot[ID]"
             class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Activate</button>
         <button type="button" id="deactivateRobot[ID]"
@@ -41,7 +41,7 @@ let chargerTemplate = `
     <td class="px-6 py-4">
         [ACTIVEHOURS]
     </td>
-    <td class="px-6 py-4 text-right">
+    <td class="px-6 py-4 text-center">
         <button type="button" id="activateCharger[ID]"
             class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Activate</button>
         <button type="button" id="deactivateCharger[ID]"
@@ -49,6 +49,8 @@ let chargerTemplate = `
     </td>
 </tr>
 `;
+
+let currentDay = 1;
 
 $(document).ready(() => {
     updateRobots();
@@ -90,6 +92,43 @@ $(document).ready(() => {
             error: (err) => {
                 console.log(err);
             }
+        });
+    });
+
+    $('#simulate').on('click', (e) => {
+        e.preventDefault();
+        $.ajax({
+            url: '/api/simulate',
+            type: 'GET',
+            success: (resp) => {
+                console.log(resp);
+                $('#log').html(resp.log.replace(/\n/g, '<br>'));
+                updateRobots();
+                updateChargers();
+            },
+            error: (err) => {
+                console.log(err);
+            },
+        });
+    });
+
+    $('#generate').on('click', (e) => {
+        e.preventDefault();
+        $.ajax({
+            url: '/api/importcargo',
+            type: 'POST',
+            data: {
+                day: currentDay,
+                amount: 2
+            },
+            success: (resp) => {
+                console.log(resp);
+                updateRobots();
+                updateChargers();
+            },
+            error: (err) => {
+                console.log(err);
+            },
         });
     });
 });
