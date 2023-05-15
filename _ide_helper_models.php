@@ -85,21 +85,21 @@ namespace App\Models{
  * App\Models\GeneratedCargo
  *
  * @property int $id
- * @property int $cargo_id
+ * @property int $template_id
  * @property int $arrival_day
  * @property int $remaining_count
  * @property int $simulation_id
- * @property-read \App\Models\CargoTemplate|null $cargo_templates
- * @property-read \App\Models\Simulation|null $simulations
+ * @property-read \App\Models\Simulation $simulation
+ * @property-read \App\Models\CargoTemplate $template
  * @method static \Database\Factories\GeneratedCargoFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|GeneratedCargo newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|GeneratedCargo newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|GeneratedCargo query()
  * @method static \Illuminate\Database\Eloquent\Builder|GeneratedCargo whereArrivalDay($value)
- * @method static \Illuminate\Database\Eloquent\Builder|GeneratedCargo whereCargoId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GeneratedCargo whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GeneratedCargo whereRemainingCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|GeneratedCargo whereSimulationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedCargo whereTemplateId($value)
  */
 	class GeneratedCargo extends \Eloquent {}
 }

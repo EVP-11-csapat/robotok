@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CargoTemplateController;
 use App\Http\Controllers\ChargerController;
 use App\Http\Controllers\GeneratedCargoController;
 use App\Http\Controllers\RobotController;
@@ -70,16 +71,38 @@ Route::get("/getrobots", [RobotController::class, 'getRobots']);
  */
 Route::get("/getchargers", [ChargerController::class, 'getChargers']);
 
+/*  /getcargotemplates - get all cargo templates
+ *  returns:
+ *    [
+ *    "id": "cargoTemplateID",
+ *    "name": "name",
+ *    "perishable": "perishable",
+ *    ]
+ */
+Route::get('/getcargotemplates', [CargoTemplateController::class, 'getCargoTemplates']);
+
+/*  /getgeneratedcargo - get all generated cargo
+ *  returns:
+ *    [
+ *    "id": "generatedCargoID",
+ *    "name": "name",
+ *    "perishable": "perishable",
+ *    "arrival_day": "arrivalDay",
+ *    "remaining_count": "amount"
+ *    ]
+ */
+Route::get('/getgeneratedcargo', [GeneratedCargoController::class, 'getGeneratedCargo']);
+
 /* /importcargo - generate cargo
-*  data :
-*    "amount" - amount of cargo to generate
-*    "day" - arrival day of the generated cargo
-*/
+ *  data :
+ *    "amount" - amount of cargo to generate
+ *    "day" - arrival day of the generated cargo
+ */
 Route::post("/importcargo", [GeneratedCargoController::class, 'importCargo']);
 
 /*  /simulate -  simulate a day
-*  returns :
-*    "remainingCargo" - cargo left in the warehouse at the  end of the day
-*    "log" - log of events during the day
-*/
+ *  returns :
+ *    "remainingCargo" - cargo left in the warehouse at the  end of the day
+ *    "log" - log of events during the day
+ */
 Route::get("/simulate", [SimulationController::class, 'simulate']);

@@ -50,11 +50,47 @@ let chargerTemplate = `
 </tr>
 `;
 
+let templaetTemplate = `
+<tr class="bg-white hover:bg-gray-50">
+    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+        [ID]
+    </th>
+    <td class="px-6 py-4">
+        [NAME]
+    </td>
+    <td class="px-6 py-4">
+        [PERISHABLE]
+    </td>
+</tr>
+`;
+
+let generatedTemplate = `
+<tr class="bg-white hover:bg-gray-50">
+    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+        [ID]
+    </th>
+    <td class="px-6 py-4">
+        [NAME]
+    </td>
+    <td class="px-6 py-4">
+        [PERISHABLE]
+    </td>
+    <td class="px-6 py-4">
+        [ARRIVAL]
+    </td>
+    <td class="px-6 py-4">
+        [REMAINING]
+    </td>
+</tr>
+`;
+
 let currentDay = 1;
 
-$(document).ready(() => {
+jQuery(() => {
     updateRobots();
     updateChargers();
+    updateTempateTable();
+    updateGeneratedTable();
     $('#buyRobot').on('click', (e) => {
         e.preventDefault();
         let robotId = $('#robots').val();
@@ -105,6 +141,7 @@ $(document).ready(() => {
                 $('#log').html(resp.log.replace(/\n/g, '<br>'));
                 updateRobots();
                 updateChargers();
+                updateGeneratedTable();
             },
             error: (err) => {
                 console.log(err);
@@ -123,8 +160,9 @@ $(document).ready(() => {
             },
             success: (resp) => {
                 console.log(resp);
-                updateRobots();
-                updateChargers();
+                // updateRobots();
+                // updateChargers();
+                updateGeneratedTable();
             },
             error: (err) => {
                 console.log(err);
@@ -249,6 +287,52 @@ const updateChargers = () => {
                         }
                     });
                 });
+            });
+        },
+        error: (err) => {
+            console.log(err);
+        }
+    });
+};
+
+const updateTempateTable = () => {
+    let templateTable = $('#templateTable')
+    let templateTableBody = $('#templateTable > tbody');
+    templateTableBody.empty();
+    $.ajax({
+        url: '/api/getcargotemplates',
+        type: 'GET',
+        success: (resp) => {
+            console.log(resp);
+            resp.data.forEach(template => {
+                let row = templaetTemplate.replace('[ID]', template.id)
+                    .replace('[NAME]', template.name)
+                    .replace('[PERISHABLE]', template.perishable ? 'Yes' : 'No');
+                templateTableBody.append(row);
+            });
+        },
+        error: (err) => {
+            console.log(err);
+        }
+    });
+};
+
+const updateGeneratedTable = () => {
+    let generatedTable = $('#generatedTable')
+    let generatedTableBody = $('#generatedTable > tbody');
+    generatedTableBody.empty();
+    $.ajax({
+        url: '/api/getgeneratedcargo',
+        type: 'GET',
+        success: (resp) => {
+            console.log(resp);
+            resp.data.forEach(cargo => {
+                let row = generatedTemplate.replace('[ID]', cargo.id)
+                    .replace('[NAME]', cargo.name)
+                    .replace('[PERISHABLE]', cargo.perishable ? 'Yes' : 'No')
+                    .replace('[ARRIVAL]', cargo.arrival_day)
+                    .replace('[REMAINING]', cargo.remaining_count);
+                generatedTableBody.append(row);
             });
         },
         error: (err) => {
