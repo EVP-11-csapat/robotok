@@ -59,6 +59,9 @@ class SimulationController extends Controller
                         if (!isset($charger->robot)) {
                             $charger->robot()->associate($chargeables->first());
                             $chargeables->forget($charger->robot->id);
+                        }else{
+                            $robots->forget($charger->robot->id);
+                            $robots->add($charger->robot);
                         }
 
                         $log .= " - Charger" . $charger->id . " is charging robot" . $charger->robot->id . "\n";

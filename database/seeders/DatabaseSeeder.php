@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         Simulation::factory()->create();
-        CargoTemplate::factory(20)->create();
+        CargoTemplate::factory(10)->create();
         RobotStore::factory(10)->create();
         ChargerStore::factory(10)->create();
     }
