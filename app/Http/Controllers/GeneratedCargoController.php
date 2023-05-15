@@ -26,12 +26,28 @@ class GeneratedCargoController extends Controller
             }
 
 
-            $cargo->remaining_count++;
+            $cargo->remaining_count = rand(1, 20);
             $cargo->save();
 
         }
 
 
         return response()->json(['success' => true, 'message' => "Imported {$amount} cargo"]);
+    }
+
+    public function getGeneratedCargo()
+    {
+        $generatedCargo = GeneratedCargo::whereSimulationId(1)->get();
+        $toreturn = [];
+        foreach ($generatedCargo as $cargo) {
+            $toreturn[] = [
+                'id' => $cargo->id,
+                'name' => $cargo->template->name,
+                'perishable' => $cargo->template->perishable,
+                'arrival_day' => $cargo->arrival_day,
+                'remaining_count' => $cargo->remaining_count
+            ];
+        }
+        return response()->json(['success' => true, 'data' => $toreturn]);
     }
 }

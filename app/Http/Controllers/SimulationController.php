@@ -64,7 +64,7 @@ class SimulationController extends Controller
                         $log .= " - Charger" . $charger->id . " is charging robot" . $charger->robot->id . "\n";
 
                         $charger->robot->charge++;
-                        if ($charger->robot->charge = $charger->robot->store->capacity) {
+                        if ($charger->robot->charge == $charger->robot->store->capacity) {
                             $chargedRobots[] = $charger->robot;
                             $charger->robot()->disassociate();
                         }
