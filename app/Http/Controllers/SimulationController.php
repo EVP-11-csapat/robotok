@@ -99,6 +99,18 @@ class SimulationController extends Controller
                         }
                     }
                 }
+
+                if($cargoList->count() == 0){
+                    if ($robot->charge < $robot->store->capacity) {
+                        foreach ($chargers as $charger) {
+                            if (!isset($charger->robot)) {
+                                $charger->robot()->associate($robot);
+                                $chargingRobots[] = $robot;
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
             $log .= "-- Finished Packing\n";
