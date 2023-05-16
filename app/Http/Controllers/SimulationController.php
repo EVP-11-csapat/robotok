@@ -37,35 +37,23 @@ class SimulationController extends Controller
 
         $log = "DAILY LOG \n\n";
 
+        $chargingRobots = [];
         $chargedRobots = [];
 
         for ($i = 0; $i < 24; $i++) {
             $log .= "Hour: $i \n";
-            $chargeables = $robots->where('active', false)->where('charge', 0);
-            if ($cargoList->count() == 0) {
-                foreach ($robots as $robot) {
-                    if ($robot->active && $robot->charge < $robot->store->capacity) {
-                        $chargeables[] = $robot;
-                    }
-                }
-            }
-            $log .= "-- Robots selected for charging: " . $chargeables->count() . "\n";
             foreach ($chargers as $charger) {
 
                 if ($charger->active) {
                     $charger->active_hours++;
                     $timeLeft = $charger->store->rate;
-                    while ($timeLeft > 0 && ($chargeables->count() > 0 || isset($charger->robot))) {
-                        if (!isset($charger->robot)) {
-                            $charger->robot()->associate($chargeables->first());
-                            $chargeables->forget($charger->robot->id);
-                        }
 
+                    while ($timeLeft > 0 && isset($charger->robot)) {
                         $log .= " - Charger" . $charger->id . " is charging robot" . $charger->robot->id . "\n";
-
                         $charger->robot->charge++;
                         if ($charger->robot->charge >= $charger->robot->store->capacity) {
                             $charger->robot->charge = $charger->robot->store->capacity;
+                            unset($chargingRobots[$charger->robot->id]);
                             $chargedRobots[] = $charger->robot;
                             $charger->robot()->disassociate();
                         }
@@ -94,6 +82,8 @@ class SimulationController extends Controller
                     if ($robot->charge == 0) {
                         $robot->active = false;
                         $log .= " - Robot" . $robot->id . " is depleted\n";
+                        $chargers->where('robot_id', null)->first()->robot()->associate($robot);
+                        $chargingRobots[] = $robot;
                     }
                 }
             }
