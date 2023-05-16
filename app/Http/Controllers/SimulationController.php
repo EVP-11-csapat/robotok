@@ -45,7 +45,7 @@ class SimulationController extends Controller
             if ($cargoList->count() == 0) {
                 foreach ($robots as $robot) {
                     if ($robot->active && $robot->charge < $robot->store->capacity) {
-                        $chargeables->add($robot);
+                        $chargeables[] = $robot;
                     }
                 }
             }
@@ -59,15 +59,13 @@ class SimulationController extends Controller
                         if (!isset($charger->robot)) {
                             $charger->robot()->associate($chargeables->first());
                             $chargeables->forget($charger->robot->id);
-                        }else{
-                            $robots->forget($charger->robot->id);
-                            $robots->add($charger->robot);
                         }
 
                         $log .= " - Charger" . $charger->id . " is charging robot" . $charger->robot->id . "\n";
 
                         $charger->robot->charge++;
-                        if ($charger->robot->charge == $charger->robot->store->capacity) {
+                        if ($charger->robot->charge >= $charger->robot->store->capacity) {
+                            $charger->robot->charge = $charger->robot->store->capacity;
                             $chargedRobots[] = $charger->robot;
                             $charger->robot()->disassociate();
                         }
@@ -78,7 +76,6 @@ class SimulationController extends Controller
             }
 
             $log .= "-- Starting Packing\n";
-
             foreach ($robots as $robot) {
                 if ($robot->active) {
                     $robot->active_hours++;
@@ -106,6 +103,7 @@ class SimulationController extends Controller
             foreach ($chargedRobots as $chargedRobot) {
                 $chargedRobot->active = true;
                 $log .= " - Robot" . $chargedRobot->id . " is fully charged\n";
+                $chargedRobot->save();
             }
             $chargedRobots = [];
         }

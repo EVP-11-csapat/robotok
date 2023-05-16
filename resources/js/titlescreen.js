@@ -91,6 +91,7 @@ jQuery(() => {
     updateChargers();
     updateTempateTable();
     updateGeneratedTable();
+    updateSimulationButton();
     $('#buyRobot').on('click', (e) => {
         e.preventDefault();
         let robotId = $('#robots').val();
@@ -139,9 +140,11 @@ jQuery(() => {
             success: (resp) => {
                 console.log(resp);
                 $('#log').html(resp.log.replace(/\n/g, '<br>'));
+                currentDay = currentDay + 1;
                 updateRobots();
                 updateChargers();
                 updateGeneratedTable();
+                updateSimulationButton();
             },
             error: (err) => {
                 console.log(err);
@@ -150,13 +153,16 @@ jQuery(() => {
     });
 
     $('#generate').on('click', (e) => {
+        let amount = $('#numberofstuff').val();
+        if (amount < 1) amount = 1;
+        if (amount > 100) amount = 100;
         e.preventDefault();
         $.ajax({
             url: '/api/importcargo',
             type: 'POST',
             data: {
                 day: currentDay,
-                amount: 2
+                amount: amount
             },
             success: (resp) => {
                 console.log(resp);
@@ -339,4 +345,8 @@ const updateGeneratedTable = () => {
             console.log(err);
         }
     });
+};
+
+const updateSimulationButton = () => {
+    $('#simulate').text(`Simulate Day ${currentDay}`)
 };
