@@ -26,7 +26,7 @@ class GeneratedCargoController extends Controller
             }
 
 
-            $cargo->remaining_count = rand(1, 20);
+            $cargo->remaining_count++;
             $cargo->save();
 
         }
