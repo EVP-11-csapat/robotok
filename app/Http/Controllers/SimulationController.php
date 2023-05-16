@@ -82,8 +82,13 @@ class SimulationController extends Controller
                     if ($robot->charge == 0) {
                         $robot->active = false;
                         $log .= " - Robot" . $robot->id . " is depleted\n";
-                        $chargers->where('robot_id', null)->first()->robot()->associate($robot);
-                        $chargingRobots[] = $robot;
+                        foreach ($chargers as $charger){
+                            if(!isset($charger->robot)){
+                                $charger->robot()->associate($robot);
+                                $chargingRobots[] = $robot;
+                                break;
+                            }
+                        }
                     }
                 }
             }
