@@ -31,7 +31,7 @@
         <div class="flex flex-wrap justify-center">
             <div class="w-full md:w-1/3 p-4">
                 <div class="bg-white shadow-lg rounded-lg p-6 flex items-center">
-                    <img src="https://robotok.fra1.cdn.digitaloceanspaces.com/swtjxf.jpg" alt="Tamás Németh"
+                    <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Tamás Németh"
                         class="w-16 h-16 rounded-full mr-4">
                     <div>
                         <h3 class="text-lg font-bold text-gray-700">Tamas Nemeth</h3>
