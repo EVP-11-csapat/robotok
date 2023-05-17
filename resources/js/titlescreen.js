@@ -86,7 +86,26 @@ let generatedTemplate = `
 
 let currentDay = 1;
 
+function checkAndGenerateCargo(id) {
+    $.ajax({
+        url: '/api/checkandgeneratecargo',
+        type: 'POST',
+        data: {
+            id: id
+        },
+        success: (resp) => {
+            console.log(resp);
+        },
+        error: (err) => {
+            console.log(err);
+        }
+    });
+}
+
 jQuery(() => {
+    if (!window.location.pathname.startsWith('/simulation/')) return;
+    let id = $('#simulationID').text();
+    checkAndGenerateCargo(id);
     updateRobots();
     updateChargers();
     updateTempateTable();

@@ -30,6 +30,8 @@
                 </svg>
             </button>
             <div class="hidden w-full md:block md:w-auto" id="navbar-dropdown">
+                {{-- Do not add route for simulation page separatly. If the user clicks off the simulation page,
+                    they need to re select the simulation from the selector --}}
                 <ul
                     class="flex flex-col font-medium p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 bg-gray-800 md:bg-gray-900 border-gray-700">
                     <li>

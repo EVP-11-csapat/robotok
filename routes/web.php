@@ -3,6 +3,7 @@
 use App\Http\Controllers\RobotStoreController;
 use App\Models\ChargerStore;
 use App\Models\RobotStore;
+use App\Models\Simulation;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,9 +18,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    $simulations = Simulation::all()->sortByDesc('created_at');
+    return view('simulationSelector')->with('simulations', $simulations);
+});
+
+Route::get('/simulation/{id}', function ($id) {
     $storeRobots = RobotStore::all()->sortBy('cost');
     $storeChargers = ChargerStore::all()->sortBy('cost');
-    return view('titlescreen')->with('storerobots', $storeRobots)->with('storechargers', $storeChargers);
+    return view('titlescreen')->with('storerobots', $storeRobots)
+        ->with('storechargers', $storeChargers)->with('id', $id);
 });
 
 Route::get('/contact', function () {

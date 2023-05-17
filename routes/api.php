@@ -100,6 +100,8 @@ Route::get('/getgeneratedcargo', [GeneratedCargoController::class, 'getGenerated
  */
 Route::post("/importcargo", [GeneratedCargoController::class, 'importCargo']);
 
+Route::post('/checkandgeneratecargo', [CargoTemplateController::class, 'checkAndGenerateCargo']);
+
 /*  /simulate -  simulate a day
  *  returns :
  *    "remainingCargo" - cargo left in the warehouse at the  end of the day
