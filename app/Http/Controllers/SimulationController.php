@@ -15,10 +15,12 @@ class SimulationController extends Controller
         $shouldGenerate = request('shouldGenerateCargo', true);
         $cargoData = request('cargoData', []);
 
+        // print("Cargo Data " . count($cargoData) . " shouldGenerate " . $shouldGenerate);
+
         $simulation = new Simulation(['TotalCost' => 0, 'currentDay' => 0]);
         $simulation->save();
 
-        if ($shouldGenerate) {
+        if ($shouldGenerate == "true") {
             CargoTemplate::factory()->count(10)->withSimulation($simulation->id)->create();
         } else {
             foreach ($cargoData as $cargo) {
