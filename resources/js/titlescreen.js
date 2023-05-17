@@ -84,7 +84,8 @@ let generatedTemplate = `
 </tr>
 `;
 
-let currentDay = 1;
+let currentDay = 0;
+let id;
 
 function checkAndGenerateCargo(id) {
     $.ajax({
@@ -104,7 +105,7 @@ function checkAndGenerateCargo(id) {
 
 jQuery(() => {
     if (!window.location.pathname.startsWith('/simulation/')) return;
-    let id = $('#simulationID').text();
+    id = $('#simulationID').text();
     checkAndGenerateCargo(id);
     updateRobots();
     updateChargers();
@@ -119,7 +120,8 @@ jQuery(() => {
             url: '/api/addrobot',
             type: 'POST',
             data: {
-                id: robotId
+                id: robotId,
+                simulationId: id
             },
             success: (resp) => {
                 console.log(resp);
@@ -139,7 +141,8 @@ jQuery(() => {
             url: '/api/addcharger',
             type: 'POST',
             data: {
-                id: chargerId
+                id: chargerId,
+                simulationId: id
             },
             success: (resp) => {
                 console.log(resp);
@@ -154,7 +157,7 @@ jQuery(() => {
     $('#simulate').on('click', (e) => {
         e.preventDefault();
         $.ajax({
-            url: '/api/simulate',
+            url: '/api/simulate/'+id,
             type: 'GET',
             success: (resp) => {
                 console.log(resp);
@@ -181,7 +184,8 @@ jQuery(() => {
             type: 'POST',
             data: {
                 day: currentDay,
-                amount: amount
+                amount: amount,
+                simulationId: id
             },
             success: (resp) => {
                 console.log(resp);
@@ -201,7 +205,7 @@ const updateRobots = () => {
     let robotTableBody = $('#robotTable > tbody');
     robotTableBody.empty();
     $.ajax({
-        url: '/api/getrobots',
+        url: '/api/getrobots/' + id,
         type: 'GET',
         success: (resp) => {
             console.log(resp);
@@ -221,7 +225,7 @@ const updateRobots = () => {
                         type: 'POST',
                         data: {
                             id: robot.id,
-                            active: true
+                            active: true,
                         },
                         success: (resp) => {
                             console.log(resp);
@@ -239,7 +243,7 @@ const updateRobots = () => {
                         type: 'POST',
                         data: {
                             id: robot.id,
-                            active: false
+                            active: false,
                         },
                         success: (resp) => {
                             console.log(resp);
@@ -263,7 +267,7 @@ const updateChargers = () => {
     let chargerTableBody = $('#chargerTable > tbody');
     chargerTableBody.empty();
     $.ajax({
-        url: '/api/getchargers',
+        url: '/api/getchargers/' + id,
         type: 'GET',
         success: (resp) => {
             console.log(resp);
@@ -283,7 +287,7 @@ const updateChargers = () => {
                         type: 'POST',
                         data: {
                             id: charger.id,
-                            active: true
+                            active: true,
                         },
                         success: (resp) => {
                             console.log(resp);
@@ -301,7 +305,7 @@ const updateChargers = () => {
                         type: 'POST',
                         data: {
                             id: charger.id,
-                            active: false
+                            active: false,
                         },
                         success: (resp) => {
                             console.log(resp);
@@ -325,7 +329,7 @@ const updateTempateTable = () => {
     let templateTableBody = $('#templateTable > tbody');
     templateTableBody.empty();
     $.ajax({
-        url: '/api/getcargotemplates',
+        url: '/api/getcargotemplates/' + id,
         type: 'GET',
         success: (resp) => {
             console.log(resp);
@@ -347,7 +351,7 @@ const updateGeneratedTable = () => {
     let generatedTableBody = $('#generatedTable > tbody');
     generatedTableBody.empty();
     $.ajax({
-        url: '/api/getgeneratedcargo',
+        url: '/api/getgeneratedcargo/' + id,
         type: 'GET',
         success: (resp) => {
             console.log(resp);

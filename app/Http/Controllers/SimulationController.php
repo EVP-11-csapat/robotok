@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CargoTemplate;
 use App\Models\Simulation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -9,22 +10,48 @@ use Illuminate\Support\Facades\DB;
 
 class SimulationController extends Controller
 {
-    public static function incrementTotalCost($value): int
+    public function createSimulation(Request $request): JsonResponse
     {
-        DB::table('simulations')->where('id', 1)->increment('totalCost', $value);
+        $shouldGenerate = request('shouldGenerateCargo', true);
+        $cargoData = request('cargoData', []);
+
+        $simulation = new Simulation(['TotalCost' => 0, 'currentDay' => 0]);
+        $simulation->save();
+
+        if ($shouldGenerate) {
+            CargoTemplate::factory()->count(10)->withSimulation($simulation->id)->create();
+        } else {
+            foreach ($cargoData as $cargo) {
+                $template = new CargoTemplate([
+                    'simulation_id' => $simulation->id,
+                    'name' => $cargo['name'],
+                    'perishable' => $cargo['perishable']
+                ]);
+                $template->save();
+            }
+        }
+
+        return response()->json(['success' => true, 'id' => $simulation->id]);
+    }
+
+    public static function incrementTotalCost($value, $simulationID): int
+    {
+        DB::table('simulations')->where('id', $simulationID)->increment('totalCost', $value);
         return 1;
     }
     // A függvény a robot árának felét várja paraméterként,
     // (automatikusan nem fogja megfelezni a metódus requestben kapott cost-ot)
-    public static function decrementTotalCost($value): int
+    public static function decrementTotalCost($value, $simulationID): int
     {
-        DB::table('simulations')->where('id', 1)->decrement('totalCost', $value);
+        DB::table('simulations')->where('id', $simulationID)->decrement('totalCost', $value);
         return 1;
     }
 
     public function simulate(Request $request): JsonResponse
     {
-        $simulation = Simulation::find(1);
+        $simulationID = $request->route('id');
+        $simulation = Simulation::find($simulationID);
+
 
         $cargoList = $simulation->generated_cargo;
         $cargoList = $cargoList->sortBy(function ($cargo) {
@@ -100,7 +127,7 @@ class SimulationController extends Controller
                     }
                 }
 
-                if($cargoList->count() == 0){
+                if ($cargoList->count() == 0) {
                     if ($robot->charge < $robot->store->capacity) {
                         foreach ($chargers as $charger) {
                             if (!isset($charger->robot)) {

@@ -22,6 +22,10 @@ Route::get('/', function () {
     return view('simulationSelector')->with('simulations', $simulations);
 });
 
+Route::get('/create', function () {
+    return view('createSimulation');
+});
+
 Route::get('/simulation/{id}', function ($id) {
     $storeRobots = RobotStore::all()->sortBy('cost');
     $storeChargers = ChargerStore::all()->sortBy('cost');

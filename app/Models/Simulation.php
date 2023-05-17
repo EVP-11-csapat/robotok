@@ -12,6 +12,8 @@ class Simulation extends Model
 
     public $timestamps = false;
 
+    protected $fillable = ['TotalCost', 'currentDay'];
+
     public function robots(): HasMany
     {
         return $this->hasMany(Robot::class);

@@ -13,9 +13,9 @@ class ChargerController extends Controller
     public function addCharger(Request $request): JsonResponse
     {
         $storeCharger = ChargerStore::find(request('id'));
-        SimulationController::incrementTotalCost($storeCharger->cost);
+        SimulationController::incrementTotalCost($storeCharger->cost, request('simulationId'));
         $charger = new Charger(['active' => false, 'active_hours' => 0]);
-        $charger->simulation()->associate(Simulation::find(1));
+        $charger->simulation()->associate(Simulation::find(request('simulationId')));
         $charger->store()->associate($storeCharger);
         $charger->save();
         return response()->json(['success' => request('id')]);
@@ -23,13 +23,14 @@ class ChargerController extends Controller
 
     public function getChargers(Request $request): JsonResponse
     {
-        $chargers = Charger::all()->sortBy('id');
+        $simulationID = $request->route('id');
+        $chargers = Charger::all()->where('simulation_id', $simulationID)->sortBy('id');
         $chargerentries = array();
         foreach ($chargers as $charger) {
 
             $chargee = ($charger->robot) ? $charger->robot->id : 'None';
 
-            $chargerentries[] = (object)[
+            $chargerentries[] = (object) [
                 'id' => $charger->id,
                 'active' => $charger->active,
                 'active_hours' => $charger->active_hours,

@@ -8,9 +8,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CargoTemplateController extends Controller
 {
-    public function getCargoTemplates()
+    public function getCargoTemplates(Request $request)
     {
-        return response()->json(['success' => true, 'data' => CargoTemplate::all()]);
+        $simulationID = $request->route('id');
+        return response()->json(['success' => true, 'data' => CargoTemplate::where('simulation_id', $simulationID)->get()]);
     }
 
     public function checkAndGenerateCargo(Request $request): JsonResponse
