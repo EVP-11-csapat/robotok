@@ -57,8 +57,8 @@ class SimulationController extends Controller
 
         $cargoList = $simulation->generated_cargo;
         $cargoList = $cargoList->sortBy(function ($cargo) {
-            return $cargo->template->perishable;
-        });
+            return ($cargo->template->perishable) ? 0 : 1;
+        })->values();
         $finished = [];
 
         $robots = $simulation->robots;
