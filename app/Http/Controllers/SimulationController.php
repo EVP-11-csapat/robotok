@@ -36,6 +36,22 @@ class SimulationController extends Controller
         return response()->json(['success' => true, 'id' => $simulation->id]);
     }
 
+    public static function getCurrentDay(Request $request): int
+    {
+        $simulationID = $request->route('id');
+        $simulation = Simulation::find($simulationID);
+        // echo ($simulation->currentDay);
+        return $simulation->currentDay;
+    }
+
+    public static function getCurrentBal(Request $request): int
+    {
+        $simulationID = $request->route('id');
+        $simulation = Simulation::find($simulationID);
+        // echo ($simulation->TotalCost);
+        return $simulation->TotalCost;
+    }
+
     public static function incrementTotalCost($value, $simulationID): int
     {
         DB::table('simulations')->where('id', $simulationID)->increment('totalCost', $value);
@@ -162,6 +178,7 @@ class SimulationController extends Controller
             $cargo->delete();
         }
 
+        $simulation->currentDay++;
         $simulation->save();
         foreach ($robots as $robot) {
             $robot->save();

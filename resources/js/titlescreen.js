@@ -371,5 +371,30 @@ const updateGeneratedTable = () => {
 };
 
 const updateSimulationButton = () => {
-    $('#simulate').text(`Simulate Day ${currentDay}`)
+    // get current day
+    console.log('ID: ' + id);
+    $.ajax({
+        url: '/api/getcurrentday/' + id,
+        type: 'GET',
+        success: (resp) => {
+            console.log(resp);
+            currentDay = resp;
+
+            $.ajax({
+                url: '/api/getcurrentbal/' + id,
+                type: 'GET',
+                success: (resp) => {
+                    console.log(resp);
+
+                    $('#simulate').text(`Simulate Day ${currentDay} - $${(resp * 100) / 100}`)
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            })
+        },
+        error: (err) => {
+            console.log(err);
+        }
+    });
 };
