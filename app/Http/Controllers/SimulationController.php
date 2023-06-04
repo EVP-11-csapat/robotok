@@ -104,9 +104,9 @@ class SimulationController extends Controller
                         $log .= " - Charger" . $charger->id . " is charging robot" . $charger->robot->id . "\n";
                         $data[$i]->charges[] = [
                             'chargerID' => $charger->id,
-                            'chargerModel' => ChargerStore::find($charger->store_id)->model,
+                            'chargerModel' => $charger->store->model,
                             'robotID' => $charger->robot->id,
-                            'robotModel' => RobotStore::find($charger->robot->store_id)->model,
+                            'robotModel' => $charger->robot->store->model,
                         ];
                         $charger->robot->charge++;
                         if ($charger->robot->charge >= $charger->robot->store->capacity) {
@@ -130,9 +130,9 @@ class SimulationController extends Controller
                         $targetCargo = $cargoList->first();
                         $data[$i]->cargo[] = [
                             'cargoID' => $targetCargo->id,
-                            'cargoName' => CargoTemplate::find($targetCargo->template_id)->name,
+                            'cargoName' => $targetCargo->template->name,
                             'robotID' => $robot->id,
-                            'robotModel' => RobotStore::find($robot->store_id)->model,
+                            'robotModel' => $robot->store->model,
                         ];
                         $log .= " - Robot" . $robot->id . " is packing cargo" . $targetCargo->id . "\n";
                         $targetCargo->remaining_count--;
@@ -147,7 +147,7 @@ class SimulationController extends Controller
                         $robot->active = false;
                         $data[$i]->depletedRobots[] = [
                             "robotID" => $robot->id,
-                            "robotModel" => RobotStore::find($robot->store_id)->model,
+                            "robotModel" => $robot->store->model,
                         ];
                         $log .= " - Robot" . $robot->id . " is depleted\n";
                         foreach ($chargers as $charger) {
@@ -187,7 +187,7 @@ class SimulationController extends Controller
                 $chargedRobot->active = true;
                 $data[$i]->chargedRobots[] = [
                     "robotID" => $chargedRobot->id,
-                    "robotModel" => RobotStore::find($robot->store_id)->model,
+                    "robotModel" => $chargedRobot->store->model,
                 ];
                 $log .= " - Robot" . $chargedRobot->id . " is fully charged\n";
                 $chargedRobot->save();
