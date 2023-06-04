@@ -85,8 +85,13 @@ class SimulationController extends Controller
         $chargingRobots = [];
         $chargedRobots = [];
 
+        $data = array();
+
         for ($i = 0; $i < 24; $i++) {
             $log .= "Hour: $i \n";
+
+            $data[$i] = new \stdClass();
+
             foreach ($chargers as $charger) {
 
                 if ($charger->active) {
@@ -95,6 +100,10 @@ class SimulationController extends Controller
 
                     while ($timeLeft > 0 && isset($charger->robot)) {
                         $log .= " - Charger" . $charger->id . " is charging robot" . $charger->robot->id . "\n";
+                        $data[$i]->charges[] = [
+                            'chargerID' => $charger->id,
+                            'robotID' => $charger->robot->id,
+                        ];
                         $charger->robot->charge++;
                         if ($charger->robot->charge >= $charger->robot->store->capacity) {
                             $charger->robot->charge = $charger->robot->store->capacity;
@@ -115,6 +124,10 @@ class SimulationController extends Controller
                     $timeLeft = $robot->store->speed;
                     while ($timeLeft > 0 && $robot->charge > 0 && $cargoList->count() > 0) {
                         $targetCargo = $cargoList->first();
+                        $data[$i]->cargo[] = [
+                            'cargoID' => $targetCargo->id,
+                            'robotID' => $robot->id,
+                        ];
                         $log .= " - Robot" . $robot->id . " is packing cargo" . $targetCargo->id . "\n";
                         $targetCargo->remaining_count--;
                         if ($targetCargo->remaining_count == 0) {
@@ -126,6 +139,7 @@ class SimulationController extends Controller
                     }
                     if ($robot->charge == 0) {
                         $robot->active = false;
+                        $data[$i]->depletedRobots[] = $robot->id;
                         $log .= " - Robot" . $robot->id . " is depleted\n";
                         foreach ($chargers as $charger) {
                             if (!isset($charger->robot)) {
@@ -162,6 +176,7 @@ class SimulationController extends Controller
 
             foreach ($chargedRobots as $chargedRobot) {
                 $chargedRobot->active = true;
+                $data[$i]->chargedRobots[] = $chargedRobot->id;
                 $log .= " - Robot" . $chargedRobot->id . " is fully charged\n";
                 $chargedRobot->save();
             }
@@ -187,6 +202,6 @@ class SimulationController extends Controller
             $charger->save();
         }
 
-        return response()->json(['success' => true, 'remainingCargo' => $cargoList, 'log' => $log]);
+        return response()->json(['success' => true, 'remainingCargo' => $cargoList, 'log' => $log, 'data' => $data]);
     }
 }
