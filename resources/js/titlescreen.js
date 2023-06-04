@@ -160,7 +160,7 @@ const printLog = (log) => {
             // let cargo = hour.cargo;
             let cargo = countAndRemoveDuplicates(hour.cargo);
             cargo.forEach((cargo) => {
-                useCargo += `${cargo.robotModel} 📦🚜 ${cargo.cargoName} (${cargo.count ? 'x' + cargo.count : 'x1'})<br>`;
+                useCargo += `${cargo.robotModel} - ${cargo.robotID} 📦🚜 ${cargo.cargoName} - ${cargo.cargoID} (${cargo.count ? 'x' + cargo.count : 'x1'})<br>`;
             });
             console.log(useCargo);
         }
@@ -170,7 +170,7 @@ const printLog = (log) => {
             // let charges = hour.charges;
             let charges = countAndRemoveDuplicates(hour.charges);
             charges.forEach((charge) => {
-                useCharges += `${charge.chargerModel} 🔌 ${charge.robotModel} (${charge.count ? 'x' + charge.count : 'x1'})<br>`;
+                useCharges += `${charge.chargerModel} - ${charge.chargerID} 🔌 ${charge.robotModel} - ${charge.robotID} (${charge.count ? 'x' + charge.count : 'x1'})<br>`;
             });
         }
         if (!hour.chargedRobots) {
@@ -178,7 +178,7 @@ const printLog = (log) => {
         } else if (hour.chargedRobots.length > 0) {
             let chargedRobots = hour.chargedRobots;
             chargedRobots.forEach((robot) => {
-                useChargedRobots += `${robot.robotModel} 🚜🔋<br>`;
+                useChargedRobots += `${robot.robotModel} - ${robot.robotID} 🚜🔋<br>`;
             });
         }
         if (!hour.depletedRobots) {
@@ -186,7 +186,7 @@ const printLog = (log) => {
         } else if (hour.depletedRobots.length > 0) {
             let depletedRobots = hour.depletedRobots;
             depletedRobots.forEach((robot) => {
-                useDepletedRobots += `${robot.robotModel} 🚜⛽🚨<br>`;
+                useDepletedRobots += `${robot.robotModel} - ${robot.robotID} 🚜⛽🚨<br>`;
             });
         }
 
