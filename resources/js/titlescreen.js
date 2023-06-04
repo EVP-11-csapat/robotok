@@ -126,6 +126,7 @@ jQuery(() => {
             success: (resp) => {
                 console.log(resp);
                 updateRobots();
+                updateSimulationButton();
             },
             error: (err) => {
                 console.log(err);
@@ -147,6 +148,7 @@ jQuery(() => {
             success: (resp) => {
                 console.log(resp);
                 updateChargers();
+                updateSimulationButton();
             },
             error: (err) => {
                 console.log(err);

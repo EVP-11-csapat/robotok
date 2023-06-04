@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\CargoTemplate;
+use App\Models\ChargerStore;
+use App\Models\RobotStore;
 use App\Models\Simulation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -102,7 +104,9 @@ class SimulationController extends Controller
                         $log .= " - Charger" . $charger->id . " is charging robot" . $charger->robot->id . "\n";
                         $data[$i]->charges[] = [
                             'chargerID' => $charger->id,
+                            'chargerMode' => ChargerStore::find($charger->store_id)->model,
                             'robotID' => $charger->robot->id,
+                            'robotModel' => RobotStore::find($charger->robot->store_id)->model,
                         ];
                         $charger->robot->charge++;
                         if ($charger->robot->charge >= $charger->robot->store->capacity) {
@@ -126,7 +130,9 @@ class SimulationController extends Controller
                         $targetCargo = $cargoList->first();
                         $data[$i]->cargo[] = [
                             'cargoID' => $targetCargo->id,
+                            'cargoName' => CargoTemplate::find($targetCargo->template_id)->name,
                             'robotID' => $robot->id,
+                            'robotModel' => RobotStore::find($robot->store_id)->model,
                         ];
                         $log .= " - Robot" . $robot->id . " is packing cargo" . $targetCargo->id . "\n";
                         $targetCargo->remaining_count--;
