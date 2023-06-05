@@ -13,9 +13,9 @@ class RobotController extends Controller
     public function addRobot(Request $request): JsonResponse
     {
         $storeRobot = RobotStore::find(request('id'));
-        SimulationController::incrementTotalCost($storeRobot->cost);
+        SimulationController::incrementTotalCost($storeRobot->cost, request('simulationId'));
         $robot = new Robot(['charge' => $storeRobot->capacity, 'active' => false, 'active_hours' => 0]);
-        $robot->simulation()->associate(Simulation::find(1));
+        $robot->simulation()->associate(Simulation::find(request('simulationId')));
         $robot->store()->associate($storeRobot);
         $robot->save();
         return response()->json(['success' => request('id')]);
@@ -23,10 +23,11 @@ class RobotController extends Controller
 
     public function getRobots(Request $request): JsonResponse
     {
-        $robots = Robot::all()->sortBy('id');
+        $simulationID = $request->route('id');
+        $robots = Robot::all()->where('simulation_id', $simulationID)->sortBy('id');
         $robotentries = array();
         foreach ($robots as $robot) {
-            $robotentries[] = (object)[
+            $robotentries[] = (object) [
                 'id' => $robot->id,
                 'charge' => $robot->charge,
                 'active' => $robot->active,

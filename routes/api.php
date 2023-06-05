@@ -58,7 +58,7 @@ Route::post("/activatecharger", [ChargerController::class, 'activateCharger']);
  *    "model": "model"
  *    ]
  */
-Route::get("/getrobots", [RobotController::class, 'getRobots']);
+Route::get("/getrobots/{id}", [RobotController::class, 'getRobots']);
 /*  /getchargers - get all chargers
  *  returns:
  *    [
@@ -69,7 +69,7 @@ Route::get("/getrobots", [RobotController::class, 'getRobots']);
  *    "model": "model"
  *    ]
  */
-Route::get("/getchargers", [ChargerController::class, 'getChargers']);
+Route::get("/getchargers/{id}", [ChargerController::class, 'getChargers']);
 
 /*  /getcargotemplates - get all cargo templates
  *  returns:
@@ -79,7 +79,7 @@ Route::get("/getchargers", [ChargerController::class, 'getChargers']);
  *    "perishable": "perishable",
  *    ]
  */
-Route::get('/getcargotemplates', [CargoTemplateController::class, 'getCargoTemplates']);
+Route::get('/getcargotemplates/{id}', [CargoTemplateController::class, 'getCargoTemplates']);
 
 /*  /getgeneratedcargo - get all generated cargo
  *  returns:
@@ -91,7 +91,7 @@ Route::get('/getcargotemplates', [CargoTemplateController::class, 'getCargoTempl
  *    "remaining_count": "amount"
  *    ]
  */
-Route::get('/getgeneratedcargo', [GeneratedCargoController::class, 'getGeneratedCargo']);
+Route::get('/getgeneratedcargo/{id}', [GeneratedCargoController::class, 'getGeneratedCargo']);
 
 /* /importcargo - generate cargo
  *  data :
@@ -100,9 +100,29 @@ Route::get('/getgeneratedcargo', [GeneratedCargoController::class, 'getGenerated
  */
 Route::post("/importcargo", [GeneratedCargoController::class, 'importCargo']);
 
+/* /checkandgeneratecargo - check if cargo needs to be generated and generate it
+ *  data :
+ *    "id" - the id of the simulation
+ */
+Route::post('/checkandgeneratecargo', [CargoTemplateController::class, 'checkAndGenerateCargo']);
+
+/*
+ * /createSimulation - create a new simulation with the given parameters
+ * data :
+ *   "cargoData" - the user given cargo
+ *   "shouldGenerateCargo" - whether or not to generate cargo
+ * returns: [
+ *  "id" - the id of the simulation
+ * ]
+ */
+Route::post('/createSimulation', [SimulationController::class, 'createSimulation']);
+
 /*  /simulate -  simulate a day
  *  returns :
  *    "remainingCargo" - cargo left in the warehouse at the  end of the day
  *    "log" - log of events during the day
  */
-Route::get("/simulate", [SimulationController::class, 'simulate']);
+Route::get("/simulate/{id}", [SimulationController::class, 'simulate']);
+
+Route::get("/getcurrentday/{id}", [SimulationController::class, 'getCurrentDay']);
+Route::get("/getcurrentbal/{id}", [SimulationController::class, 'getCurrentBal']);

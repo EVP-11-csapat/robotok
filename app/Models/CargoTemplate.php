@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class CargoTemplate extends Model
 {
     use HasFactory;
+    protected $fillable = ['name', 'perishable', 'simulation_id'];
 
     public $timestamps = false;
 
-    public function simulations(){
+    public function simulations()
+    {
         return $this->belongsTo(Simulation::class);
     }
 }

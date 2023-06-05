@@ -17,8 +17,8 @@ class ChargerStoreFactory extends Factory
     public function definition(): array
     {
 
-        $rate = $this->faker->randomFloat(0, 0, 10);
-        $cost = pow(2, ($rate)+(random_int(0,10))) + 1000;
+        $rate = $this->faker->randomFloat(0, 1, 16);
+        $cost = 1000 + round($rate * log($rate) * 1000, -2) + (random_int(0, 20) * 100);
 
         return [
             'rate' => $rate,

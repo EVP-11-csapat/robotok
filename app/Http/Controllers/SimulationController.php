@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CargoTemplate;
+use App\Models\ChargerStore;
+use App\Models\RobotStore;
 use App\Models\Simulation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -9,27 +12,71 @@ use Illuminate\Support\Facades\DB;
 
 class SimulationController extends Controller
 {
-    public static function incrementTotalCost($value): int
+    public function createSimulation(Request $request): JsonResponse
     {
-        DB::table('simulations')->where('id', 1)->increment('totalCost', $value);
+        $shouldGenerate = request('shouldGenerateCargo', true);
+        $cargoData = request('cargoData', []);
+
+        // print("Cargo Data " . count($cargoData) . " shouldGenerate " . $shouldGenerate);
+
+        $simulation = new Simulation(['TotalCost' => 0, 'currentDay' => 0]);
+        $simulation->save();
+
+        if ($shouldGenerate == "true") {
+            CargoTemplate::factory()->count(10)->withSimulation($simulation->id)->create();
+        } else {
+            foreach ($cargoData as $cargo) {
+                $template = new CargoTemplate([
+                    'simulation_id' => $simulation->id,
+                    'name' => $cargo['name'],
+                    'perishable' => $cargo['perishable']
+                ]);
+                $template->save();
+            }
+        }
+
+        return response()->json(['success' => true, 'id' => $simulation->id]);
+    }
+
+    public static function getCurrentDay(Request $request): int
+    {
+        $simulationID = $request->route('id');
+        $simulation = Simulation::find($simulationID);
+        // echo ($simulation->currentDay);
+        return $simulation->currentDay;
+    }
+
+    public static function getCurrentBal(Request $request): int
+    {
+        $simulationID = $request->route('id');
+        $simulation = Simulation::find($simulationID);
+        // echo ($simulation->TotalCost);
+        return $simulation->TotalCost;
+    }
+
+    public static function incrementTotalCost($value, $simulationID): int
+    {
+        DB::table('simulations')->where('id', $simulationID)->increment('totalCost', $value);
         return 1;
     }
     // A függvény a robot árának felét várja paraméterként,
     // (automatikusan nem fogja megfelezni a metódus requestben kapott cost-ot)
-    public static function decrementTotalCost($value): int
+    public static function decrementTotalCost($value, $simulationID): int
     {
-        DB::table('simulations')->where('id', 1)->decrement('totalCost', $value);
+        DB::table('simulations')->where('id', $simulationID)->decrement('totalCost', $value);
         return 1;
     }
 
     public function simulate(Request $request): JsonResponse
     {
-        $simulation = Simulation::find(1);
+        $simulationID = $request->route('id');
+        $simulation = Simulation::find($simulationID);
+
 
         $cargoList = $simulation->generated_cargo;
         $cargoList = $cargoList->sortBy(function ($cargo) {
-            return $cargo->template->perishable;
-        });
+            return ($cargo->template->perishable) ? 0 : 1;
+        })->values();
         $finished = [];
 
         $robots = $simulation->robots;
@@ -40,8 +87,13 @@ class SimulationController extends Controller
         $chargingRobots = [];
         $chargedRobots = [];
 
+        $data = array();
+
         for ($i = 0; $i < 24; $i++) {
             $log .= "Hour: $i \n";
+
+            $data[$i] = new \stdClass();
+
             foreach ($chargers as $charger) {
 
                 if ($charger->active) {
@@ -50,6 +102,12 @@ class SimulationController extends Controller
 
                     while ($timeLeft > 0 && isset($charger->robot)) {
                         $log .= " - Charger" . $charger->id . " is charging robot" . $charger->robot->id . "\n";
+                        $data[$i]->charges[] = [
+                            'chargerID' => $charger->id,
+                            'chargerModel' => $charger->store->model,
+                            'robotID' => $charger->robot->id,
+                            'robotModel' => $charger->robot->store->model,
+                        ];
                         $charger->robot->charge++;
                         if ($charger->robot->charge >= $charger->robot->store->capacity) {
                             $charger->robot->charge = $charger->robot->store->capacity;
@@ -70,6 +128,12 @@ class SimulationController extends Controller
                     $timeLeft = $robot->store->speed;
                     while ($timeLeft > 0 && $robot->charge > 0 && $cargoList->count() > 0) {
                         $targetCargo = $cargoList->first();
+                        $data[$i]->cargo[] = [
+                            'cargoID' => $targetCargo->id,
+                            'cargoName' => $targetCargo->template->name,
+                            'robotID' => $robot->id,
+                            'robotModel' => $robot->store->model,
+                        ];
                         $log .= " - Robot" . $robot->id . " is packing cargo" . $targetCargo->id . "\n";
                         $targetCargo->remaining_count--;
                         if ($targetCargo->remaining_count == 0) {
@@ -81,6 +145,10 @@ class SimulationController extends Controller
                     }
                     if ($robot->charge == 0) {
                         $robot->active = false;
+                        $data[$i]->depletedRobots[] = [
+                            "robotID" => $robot->id,
+                            "robotModel" => $robot->store->model,
+                        ];
                         $log .= " - Robot" . $robot->id . " is depleted\n";
                         foreach ($chargers as $charger) {
                             if (!isset($charger->robot)) {
@@ -100,7 +168,7 @@ class SimulationController extends Controller
                     }
                 }
 
-                if($cargoList->count() == 0){
+                if ($cargoList->count() == 0) {
                     if ($robot->charge < $robot->store->capacity) {
                         foreach ($chargers as $charger) {
                             if (!isset($charger->robot)) {
@@ -117,6 +185,10 @@ class SimulationController extends Controller
 
             foreach ($chargedRobots as $chargedRobot) {
                 $chargedRobot->active = true;
+                $data[$i]->chargedRobots[] = [
+                    "robotID" => $chargedRobot->id,
+                    "robotModel" => $chargedRobot->store->model,
+                ];
                 $log .= " - Robot" . $chargedRobot->id . " is fully charged\n";
                 $chargedRobot->save();
             }
@@ -133,6 +205,7 @@ class SimulationController extends Controller
             $cargo->delete();
         }
 
+        $simulation->currentDay++;
         $simulation->save();
         foreach ($robots as $robot) {
             $robot->save();
@@ -141,6 +214,6 @@ class SimulationController extends Controller
             $charger->save();
         }
 
-        return response()->json(['success' => true, 'remainingCargo' => $cargoList, 'log' => $log]);
+        return response()->json(['success' => true, 'remainingCargo' => $cargoList, 'log' => $log, 'data' => $data]);
     }
 }

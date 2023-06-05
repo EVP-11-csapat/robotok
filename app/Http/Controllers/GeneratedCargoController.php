@@ -12,14 +12,15 @@ class GeneratedCargoController extends Controller
     public function importCargo(Request $request): JsonResponse
     {
         $amount = request('amount', 1);
+        $simulationID = request('simulationId', 1);
 
         for ($i = 0; $i < $amount; $i++) {
 
-            $template = CargoTemplate::whereSimulationId(1)->inRandomOrder()->first();
+            $template = CargoTemplate::whereSimulationId($simulationID)->inRandomOrder()->first();
 
             $cargo = GeneratedCargo::firstOrCreate(
                 ['template_id' => $template->id, 'arrival_day' => request('day', 0)],
-                ['simulation_id' => 1, 'remaining_count' => 0]
+                ['simulation_id' => $simulationID, 'remaining_count' => 0]
             );
             if ($cargo->template === null) {
                 $cargo->template()->associate($template);
@@ -35,9 +36,10 @@ class GeneratedCargoController extends Controller
         return response()->json(['success' => true, 'message' => "Imported {$amount} cargo"]);
     }
 
-    public function getGeneratedCargo()
+    public function getGeneratedCargo(Request $request)
     {
-        $generatedCargo = GeneratedCargo::whereSimulationId(1)->get();
+        $simulationID = $request->route('id');
+        $generatedCargo = GeneratedCargo::whereSimulationId($simulationID)->get();
         $toreturn = [];
         foreach ($generatedCargo as $cargo) {
             $toreturn[] = [
