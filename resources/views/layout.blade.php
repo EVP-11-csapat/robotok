@@ -12,7 +12,6 @@
 </head>
 
 <body>
-    <span class="discord iconify" data-icon="logos:discord" data-inline="false"></span>
     <nav class="bg-gray-900 border-gray-700">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="#" class="flex items-center">
