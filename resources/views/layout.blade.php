@@ -7,10 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
     <title>Robotok - @yield('title')</title>
 </head>
 
 <body>
+    <span class="discord iconify" data-icon="logos:discord" data-inline="false"></span>
     <nav class="bg-gray-900 border-gray-700">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="#" class="flex items-center">
