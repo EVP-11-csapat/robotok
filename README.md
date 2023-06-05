@@ -4,7 +4,7 @@
 
 This Laravel project simulates robots and chargers in a warehouse environment. The robots are responsible for moving cargo, while the chargers are responsible for charging the robots.
 
-This project is built on top of the ![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white) framework.
+This project is built on top of the [![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com/) framework.
 
 ![GitHub license](https://img.shields.io/github/license/EVP-11-csapat/robotok?style=for-the-badge)
 ![GitHub repo size](https://img.shields.io/github/repo-size/EVP-11-csapat/robotok?style=for-the-badge)
