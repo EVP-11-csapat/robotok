@@ -17,9 +17,9 @@ class RobotStoreFactory extends Factory
 
     public function definition(): array
     {
-        $speed = $this->faker->randomFloat(0, 0, 10);
-        $capacity = $this->faker->randomFloat(0, 0, 50);
-        $cost = pow(2, ($speed*0.5)+($capacity*0.3)+(random_int(0,5))) + 1000;
+        $speed = $this->faker->randomFloat(0, 1, 16);
+        $capacity = $this->faker->randomFloat(0, 1, 64);
+        $cost = 1000 + round($speed * log($speed) * 400 + $capacity * log($capacity) * 100, -2) + (random_int(0, 20) * 100);
 
 
         return [
