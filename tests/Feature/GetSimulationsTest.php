@@ -112,4 +112,27 @@ class GetSimulationsTest extends TestCase
         $responseData = $response->json();
         $this->assertCount(10, $responseData['data']);
     }
+
+    public function test_simulate(): void
+    {
+        $this->seed();
+        $simulations = Simulation::all();
+        $this->assertCount(1, $simulations);
+        $this->post('/api/checkandgeneratecargo', [
+            'id' => 1,
+        ]);
+        $response = $this->get('/api/simulate/1', [
+            'id' => 1,
+        ]);
+        fwrite(STDERR, print_r($response->json(), TRUE));
+        $response->assertStatus(200)
+                 ->assertJson([
+                     'success' => 1,
+                     'data' => []
+                 ]);
+
+        $responseData = $response->json();
+        $this->assertNotEmpty($responseData['log']);
+        $this->assertCount(24, $responseData['data']);
+    }
 }
