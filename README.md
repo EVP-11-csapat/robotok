@@ -9,8 +9,6 @@ This project is built on top of the [![Laravel](https://img.shields.io/badge/Lar
 ![GitHub license](https://img.shields.io/github/license/EVP-11-csapat/robotok?style=for-the-badge)
 ![GitHub repo size](https://img.shields.io/github/repo-size/EVP-11-csapat/robotok?style=for-the-badge)
 ![GitHub last commit](https://img.shields.io/github/last-commit/EVP-11-csapat/robotok?style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/EVP-11-csapat/robotok?style=for-the-badge)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/EVP-11-csapat/robotok?style=for-the-badge)
 ![GitHub contributors](https://img.shields.io/github/contributors/EVP-11-csapat/robotok?style=for-the-badge)
 
 ## Table of Contents
