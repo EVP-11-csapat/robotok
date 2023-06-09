@@ -101,6 +101,9 @@ Here are some screenshots of the Robots application for reference:
 
 8. ### Previous Days' Log:
    ![Log](.github/images/previous_days_log.png)
+   
+## Documentation
+![Documentation](docs/Documentation.pdf)
 
 ## License
 
