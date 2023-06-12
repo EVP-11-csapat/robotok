@@ -110,7 +110,7 @@ Route::post('/checkandgeneratecargo', [CargoTemplateController::class, 'checkAnd
  * /createSimulation - create a new simulation with the given parameters
  * data :
  *   "cargoData" - the user given cargo
- *   "shouldGenerateCargo" - whether or not to generate cargo
+ *   "shouldGenerateCargo" - whether to generate cargo
  * returns: [
  *  "id" - the id of the simulation
  * ]
