@@ -20,6 +20,7 @@ This project is built on top of the [![Laravel](https://img.shields.io/badge/Lar
   - [Robot and Charger Management](#robot-and-charger-management)
   - [Simulating and Generating Cargo](#simulating-and-generating-cargo)
 - [Screenshots](#screenshots)
+- [Documentation](#documentation)
 - [License](#license)
 
 ## Installation
@@ -103,7 +104,7 @@ Here are some screenshots of the Robots application for reference:
    ![Log](.github/images/previous_days_log.png)
    
 ## Documentation
-![Documentation](docs/Documentation.pdf)
+The documentation for the project can be found [HERE](docs/Documentation.pdf).
 
 ## License
 
