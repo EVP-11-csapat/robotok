@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
     <title>Robotok - @yield('title')</title>
 </head>
 

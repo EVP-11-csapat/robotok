@@ -1,0 +1,28 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/php
+{
+	"name": "PHP",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/php:0-8.2",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [
+		8000,
+		5173
+	],
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": {}
+	},
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "sudo sed -i 's#zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20220829/xdebug.so#;zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20220829/xdebug.so#g' /usr/local/etc/php/conf.d/xdebug.ini && sudo service apache2 restart && composer install && npm install"
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

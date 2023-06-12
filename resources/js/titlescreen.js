@@ -84,6 +84,26 @@ let generatedTemplate = `
 </tr>
 `;
 
+let logTemplate = `
+<tr class="bg-white border-b">
+    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+        [HOUR]
+    </th>
+    <td class="px-6 py-4">
+        [PACKING]
+    </td>
+    <td class="px-6 py-4">
+        [CHARGING]
+    </td>
+    <td class="px-6 py-4">
+        [DEPLETED]
+    </td>
+    <td class="px-6 py-4">
+        [CHARGED]
+    </td>
+</tr>
+`;
+
 let currentDay = 0;
 let id;
 
@@ -102,6 +122,84 @@ function checkAndGenerateCargo(id) {
         }
     });
 }
+
+function countAndRemoveDuplicates(arr) {
+    const counts = {};
+    const result = [];
+
+    arr.forEach((obj) => {
+        const key = JSON.stringify(obj);
+        counts[key] = (counts[key] || 0) + 1;
+    });
+
+    Object.keys(counts).forEach((key) => {
+        const obj = JSON.parse(key);
+        obj.count = counts[key];
+        result.push(obj);
+    });
+
+    return result;
+}
+
+const printLog = (log) => {
+    let currentHour = 0;
+    let logTableBody = $('#logTableBody');
+    logTableBody.empty();
+    console.log("STARTING LOG");
+    log.forEach((hour) => {
+        // console.log(hour);
+        let useCargo = "";
+        let useCharges = "";
+        let useChargedRobots = "";
+        let useDepletedRobots = "";
+
+        if (!hour.cargo) {
+            useCargo = "-";
+        } else if (hour.cargo.length > 0) {
+            // TODO: count duplicates
+            // let cargo = hour.cargo;
+            let cargo = countAndRemoveDuplicates(hour.cargo);
+            cargo.forEach((cargo) => {
+                useCargo += `${cargo.robotModel} - ${cargo.robotID} <span class="iconify" data-icon="twemoji:package" data-inline="false"></span><span class="iconify" data-icon="twemoji:tractor" data-inline="false"></span> ${cargo.cargoName} - ${cargo.cargoID} (${cargo.count ? 'x' + cargo.count : 'x1'})<br>`;
+            });
+            console.log(useCargo);
+        }
+        if (!hour.charges) {
+            useCharges = "-";
+        } else if (hour.charges.length > 0) {
+            // let charges = hour.charges;
+            let charges = countAndRemoveDuplicates(hour.charges);
+            charges.forEach((charge) => {
+                useCharges += `${charge.chargerModel} - ${charge.chargerID} <span class="iconify" data-icon="twemoji:electric-plug" data-inline="false"></span> ${charge.robotModel} - ${charge.robotID} (${charge.count ? 'x' + charge.count : 'x1'})<br>`;
+            });
+        }
+        if (!hour.chargedRobots) {
+            useChargedRobots = "-";
+        } else if (hour.chargedRobots.length > 0) {
+            let chargedRobots = hour.chargedRobots;
+            chargedRobots.forEach((robot) => {
+                useChargedRobots += `${robot.robotModel} - ${robot.robotID} <span class="iconify" data-icon="twemoji:tractor" data-inline="false"></span><span class="iconify" data-icon="twemoji:battery" data-inline="false"></span><br>`;
+            });
+        }
+        if (!hour.depletedRobots) {
+            useDepletedRobots = "-";
+        } else if (hour.depletedRobots.length > 0) {
+            let depletedRobots = hour.depletedRobots;
+            depletedRobots.forEach((robot) => {
+                useDepletedRobots += `${robot.robotModel} - ${robot.robotID} <span class="iconify" data-icon="twemoji:tractor" data-inline="false"></span><span class="iconify" data-icon="twemoji:low-battery" data-inline="false"></span><br>`;
+            });
+        }
+
+        let logRow = logTemplate.replace('[HOUR]', currentHour)
+            .replace('[PACKING]', useCargo)
+            .replace('[CHARGING]', useCharges)
+            .replace('[DEPLETED]', useDepletedRobots)
+            .replace('[CHARGED]', useChargedRobots);
+        logTableBody.append(logRow);
+        currentHour++;
+    });
+    console.log("ENDING LOG");
+};
 
 jQuery(() => {
     if (!window.location.pathname.startsWith('/simulation/')) return;
@@ -126,6 +224,7 @@ jQuery(() => {
             success: (resp) => {
                 console.log(resp);
                 updateRobots();
+                updateSimulationButton();
             },
             error: (err) => {
                 console.log(err);
@@ -147,6 +246,7 @@ jQuery(() => {
             success: (resp) => {
                 console.log(resp);
                 updateChargers();
+                updateSimulationButton();
             },
             error: (err) => {
                 console.log(err);
@@ -157,11 +257,11 @@ jQuery(() => {
     $('#simulate').on('click', (e) => {
         e.preventDefault();
         $.ajax({
-            url: '/api/simulate/'+id,
+            url: '/api/simulate/' + id,
             type: 'GET',
             success: (resp) => {
                 console.log(resp);
-                $('#log').html(resp.log.replace(/\n/g, '<br>'));
+                printLog(resp.data);
                 currentDay = currentDay + 1;
                 updateRobots();
                 updateChargers();
@@ -371,5 +471,30 @@ const updateGeneratedTable = () => {
 };
 
 const updateSimulationButton = () => {
-    $('#simulate').text(`Simulate Day ${currentDay}`)
+    // get current day
+    console.log('ID: ' + id);
+    $.ajax({
+        url: '/api/getcurrentday/' + id,
+        type: 'GET',
+        success: (resp) => {
+            console.log(resp);
+            currentDay = resp;
+
+            $.ajax({
+                url: '/api/getcurrentbal/' + id,
+                type: 'GET',
+                success: (resp) => {
+                    console.log(resp);
+
+                    $('#simulate').text(`Simulate Day ${currentDay} - $${(resp * 100) / 100}`)
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            })
+        },
+        error: (err) => {
+            console.log(err);
+        }
+    });
 };

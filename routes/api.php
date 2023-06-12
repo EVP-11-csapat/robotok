@@ -123,3 +123,6 @@ Route::post('/createSimulation', [SimulationController::class, 'createSimulation
  *    "log" - log of events during the day
  */
 Route::get("/simulate/{id}", [SimulationController::class, 'simulate']);
+
+Route::get("/getcurrentday/{id}", [SimulationController::class, 'getCurrentDay']);
+Route::get("/getcurrentbal/{id}", [SimulationController::class, 'getCurrentBal']);

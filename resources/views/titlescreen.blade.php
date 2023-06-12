@@ -10,7 +10,7 @@
     {{-- Pass the id parameter to the js file using this element --}}
     <span class="hidden" id="simulationID">{{ $id }}</span>
     <form>
-        <div class="grid gap-6 mb-6 lg:grid-cols-4 md:grid-cols-2 grid-cols-1">
+        <div class="grid gap-6 mb-6 xl:grid-cols-4 lg:grid-cols-2 grid-cols-1">
             <div class="flex w-full">
                 <div class="w-full">
                     <label for="robots" class="block mb-2 text-sm font-medium text-gray-900">Select a Robot</label>
@@ -21,7 +21,7 @@
                             <option value="{{ $robot->id }}">Speed: {{ $robot->speed }} - Capacity:
                                 {{ $robot->capacity }}
                                 -
-                                Model: {{ $robot->model }} - Price: {{ $robot->cost }}</option>
+                                Model: {{ $robot->model }} - Price: {{ number_format($robot->cost, 2) }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -37,7 +37,7 @@
                         <option value="">Choose a Charger to buy</option>
                         @foreach ($storechargers as $charger)
                             <option value="{{ $charger->id }}">Rate: {{ $charger->rate }} -
-                                Model: {{ $charger->model }} - Price: {{ $charger->cost }}</option>
+                                Model: {{ $charger->model }} - Price: {{ number_format($charger->cost, 2) }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -187,5 +187,34 @@
         <p id="log">
 
         </p>
+
+
+    </div>
+
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg ">
+        <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Hour
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Packing
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Charging
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Depleted
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Charged
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="logTableBody">
+
+            </tbody>
+        </table>
     </div>
 @endsection
